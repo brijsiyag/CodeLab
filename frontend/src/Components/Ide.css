@@ -1,0 +1,73 @@
+:root {
+  --gray-background: rgb(233, 233, 233);
+}
+
+.ide .main-container {
+  border: 1px solid black;
+  border-radius: 2px;
+}
+
+.code-input-container {
+  padding: 0;
+  margin: 0;
+  background-color: var(--gray-background);
+}
+
+.code-input {
+  width: 50vw;
+  height: 50vh;
+  outline: none;
+  resize: none;
+  padding: 5px;
+}
+
+.ide-controller {
+  display: flex;
+  justify-content: flex-end;
+  background-color: var(--gray-background);
+}
+
+.run-btn-container,
+.submit-btn-container {
+  margin: 0 0 5px 20px;
+}
+
+.run-btn,
+.submit-btn {
+  font-size: 1.3rem;
+  border-radius: 3px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.run-btn:active,
+.submit-btn:active {
+  transform: scale(0.97);
+  color: black;
+}
+.run-btn {
+}
+
+.submit-btn {
+}
+
+.in-out-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.output-container {
+  width: 25vw;
+  height: 20vh;
+  border: 1px solid black;
+  background-color: white;
+  padding: 10px;
+}
+
+.input-container {
+  width: 25vw;
+  height: 20vh;
+  border: 1px solid black;
+  background-color: white;
+  padding: 10px;
+}
