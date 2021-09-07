@@ -1,0 +1,20 @@
+select {
+  padding: 5px;
+  width: fit-content;
+  border: 1px solid #474747;
+  border-radius: 5px;
+  background: rgb(255, 255, 255);
+  box-shadow: 0 1px 3px -2px #9098a9;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 150ms ease;
+  outline: none;
+  -webkit-appearance: menulist-button;
+  max-height: 200px;
+  overflow: auto;
+}
+
+option {
+  color: #223254;
+  display: none;
+}

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from "./Components/Login"
 import Ide from "./Components/Ide"
 import GetOutput from "./GetOutput";
-
+import Navbar from "./Components/Navbar";
 function App() {
   const [code, setCode] = React.useState("");
   const codeChange = (e) => {
@@ -16,8 +16,8 @@ function App() {
   }
   return (
     <div>
+      <Navbar />
       <Router>
-        {/* <Navbar /> */}
         <Switch>
           <Route exact path='/'>
             <Login />

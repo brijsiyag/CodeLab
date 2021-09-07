@@ -1,0 +1,17 @@
+.run-info {
+  border: gray 1px solid;
+  display: flex;
+  margin: 20px 0;
+  padding: 12px 3px;
+  justify-content: space-around;
+  color: rgb(92, 92, 92);
+}
+/* .run-info .status,
+.run-info .date,
+.run-info .time,
+.run-info .memory */
+
+.run-info .heading {
+  font-weight: 900;
+  margin-right: 10px;
+}
