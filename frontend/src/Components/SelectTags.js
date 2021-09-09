@@ -98,14 +98,6 @@ const SelectTags = ({ setLang, setFontSize, setTheme, setMode, setDownloadExt })
             </div >
             <div>
                 <label htmlFor="fontSize" className="lang-label">Font Size:</label>
-                {/* <select id='fontSize' onChange={selectChangeFontSize} defaultValue="14">
-                    <option value="11">11pt</option>
-                    <option value="12">12pt</option>
-                    <option value="14">14pt</option>
-                    <option value="18">18pt</option>
-                    <option value="24">24pt</option>
-                    <option value="36">36pt</option>
-                </select> */}
                 <input type="number" id="fontSize" onChange={selectChangeFontSize} defaultValue="14"></input>
             </div>
             <div>
