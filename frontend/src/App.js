@@ -20,7 +20,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path='/'>
-            <Login />
+            <Ide />
           </Route>
           <Route path='/ide'>
             <Ide />

@@ -18,3 +18,12 @@ option {
   color: #223254;
   display: none;
 }
+
+#fontSize {
+  background-color: rgb(243, 243, 243);
+  width: 50px;
+  border: #474747 solid 1px;
+  border-radius: 5px;
+  padding: 1.5px 5px 1.5px 3px;
+  outline: none;
+}

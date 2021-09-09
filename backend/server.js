@@ -30,12 +30,14 @@ app.post("/", (req, res) => {
         json: program
     },
         function (error, response, body) {
+            let data = { ...body };
             if (error) {
                 console.log(error);
-                res.send(error);
             }
             else {
-                res.send(body);
+                data.date = response.headers.date;
+                res.send(data);
+                console.log(data);
             }
         });
 })

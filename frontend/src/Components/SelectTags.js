@@ -1,25 +1,38 @@
 import React from 'react'
 import "./SelectTags.css"
-const SelectTags = ({ setLang, setFontSize }) => {
-
-    const selectChange = (e) => {
-        setLang(e.target.value)
+import LangData from './LangData'
+const SelectTags = ({ setLang, setFontSize, setTheme, setMode, setDownloadExt }) => {
+    const selectChangeLang = (e) => {
+        const lang = e.target.value;
+        const langext = LangData.exts[lang];
+        if (langext != undefined) {
+            setDownloadExt(langext);
+        }
+        else {
+            setDownloadExt(".txt");
+        }
+        setLang(lang);
+        setMode(LangData.langToAce[lang])
     }
     const selectChangeFontSize = (e) => {
         setFontSize(e.target.value + "pt");
     }
+    const selectChangeTheme = (e) => {
+        setTheme(e.target.value);
+    }
     return (
         <div style={{ display: "flex" }}>
             <div>
-                <label for="langauge" className="lang-label">Language:</label>
-                <select id='language' onChange={selectChange}>
+                <label htmlFor="language" className="lang-label">Language:</label>
+                <select id='language' onChange={selectChangeLang} defaultValue="cpp17">
                     <option value="java">Java</option>
                     <option value="c">C</option>
                     <option value="cpp">C++</option>
                     <option value="cpp14">C++ 14</option>
-                    <option value="cpp17" selected="selected">C++ 17</option>
+                    <option value="cpp17">C++ 17</option>
                     <option value="python2">Python 2</option>
                     <option value="python3">Python 3</option>
+                    <option value="kotlin">Kotlin</option>
                     <option value="swift">Swift</option>
                     <option value="go">Go Lang</option>
                     <option value="bash">Bash Shell</option>
@@ -35,7 +48,7 @@ const SelectTags = ({ setLang, setFontSize }) => {
                     <option value="pascal">Pascal</option>
                     <option value="vbn">VB.Net</option>
                     <option value="haskell">Haskell</option>
-                    <option value="objc">Objective C</option>
+                    <option value="objc">Objective C </option>
                     <option value="groovy">Groovy</option>
                     <option value="fortran">Fortran</option>
                     <option value="brainfuck">Brainfuck</option>
@@ -59,7 +72,6 @@ const SelectTags = ({ setLang, setFontSize }) => {
                     <option value="icon">Icon</option>
                     <option value="fsharp">F#</option>
                     <option value="nasm">Assembler - NASM</option>
-                    <option value="gccasm">Assembler-GCC</option>
                     <option value="intercal">Intercal</option>
                     <option value="nemerle">Nemerle</option>
                     <option value="ocaml">Ocaml</option>
@@ -79,24 +91,40 @@ const SelectTags = ({ setLang, setFontSize }) => {
                     <option value="mozart">OZ Mozart</option>
                     <option value="lolcode">LoL Code</option>
                     <option value="racket">Racket</option>
-                    <option value="kotlin">Kotlin</option>
                     <option value="whitespace">WhiteSpace</option>
                     <option value="erlang">Erlang</option>
                     <option value="jlang">J</option>
-                </select>
-            </div>
+                </select >
+            </div >
             <div>
-                <label for="fontSize" className="lang-label">Font Size:</label>
-                <select id='fontSize' onChange={selectChangeFontSize}>
+                <label htmlFor="fontSize" className="lang-label">Font Size:</label>
+                {/* <select id='fontSize' onChange={selectChangeFontSize} defaultValue="14">
                     <option value="11">11pt</option>
                     <option value="12">12pt</option>
-                    <option value="14" selected="selected">14pt</option>
+                    <option value="14">14pt</option>
                     <option value="18">18pt</option>
                     <option value="24">24pt</option>
                     <option value="36">36pt</option>
+                </select> */}
+                <input type="number" id="fontSize" onChange={selectChangeFontSize} defaultValue="14"></input>
+            </div>
+            <div>
+                <label htmlFor="theme" className="theme-label">Theme:</label>
+                <select id='theme' onChange={selectChangeTheme} defaultValue="Chrome">
+                    <option value="chrome">Chrome</option>
+                    <option value="monokai">Monokai</option>
+                    <option value="tomorrow">Tomorrow</option>
+                    <option value="tomorrow_night">Tomorrow Night</option>
+                    <option value="tomorrow_night_eighties">Tomorrow Night Eighties</option>
+                    <option value="tomorrow_night_bright">Tomorrow Night Bright</option>
+                    <option value="solarized_light">Solarized Light</option>
+                    <option value="solarized_dark">Solarized Dark</option>
+                    <option value="cobalt">Cobalt</option>
+                    <option value="twilight">Twilight</option>
+                    <option value="xcode">Xcode</option>
                 </select>
             </div>
-        </div>
+        </div >
     )
 }
 
