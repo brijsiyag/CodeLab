@@ -6,13 +6,18 @@
 
 body {
   background: #f6f5f7;
+  font-family: "Ubuntu", sans-serif;
+  min-height: 100vh;
+  margin: -20px 0 50px;
+}
+
+.login {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-family: "Ubuntu", sans-serif;
   min-height: 100vh;
-  margin: -20px 0 50px;
+  width: 100vw;
 }
 
 .login h1 {

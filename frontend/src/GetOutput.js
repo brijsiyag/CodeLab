@@ -16,5 +16,4 @@ const getOutput = async (code, lang, input) => {
     }
     return output;
 };
-
 export default getOutput;

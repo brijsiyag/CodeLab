@@ -1,5 +1,5 @@
 import React from "react"
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import './Ide.css';
 import SelectTags from "./SelectTags";
 import RunInfo from "./RunInfo";
@@ -55,7 +55,7 @@ import "ace-builds/src-noconflict/theme-cobalt";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/theme-xcode";
 
-function App() {
+const Ide = () => {
     const [code, setCode] = useState("");
     const [lang, setLang] = useState("cpp17");
     const [mode, setMode] = useState("c_cpp")
@@ -104,64 +104,66 @@ function App() {
         element.click();
     }
     return (
-        <div className="ide-container">
-            <div className="intro">
-                <div className="ide-heading">Code, Compile & Run</div>
-                Compile & run your code with the CodeLab online IDE. Our online compiler supports multiple programming languages like Python, C++, C, Kotlin, NodeJS, and many more.
-            </div>
-            <div className="ide">
-                <div className="ide-header">
-                    <SelectTags setLang={setLang} setFontSize={setFontSize} setTheme={setTheme} setMode={setMode}
-                        setDownloadExt={setDownloadExt}
-                    />
-                    <div style={{ display: "flex" }}>
-                        <button onClick={codeCopy} className="copy-btn">Copy</button>
-                        <div onClick={downloadCode} style={{ marginRight: "15px" }}><i class="fas fa-download"></i></div>
-                    </div>
+        <div className="ide-body">
+            <div className="ide-container">
+                <div className="intro">
+                    <div className="ide-heading">Code, Compile & Run</div>
+                    Compile & run your code with the CodeLab online IDE. Our online compiler supports multiple programming languages like Python, C++, C, Kotlin, NodeJS, and many more.
                 </div>
-                <div className="main-container">
-                    <div className="code-input-container">
-                        <AceEditor
-                            fontSize={fontSize}
-                            className="code-input"
-                            mode={mode}
-                            theme={theme}
-                            onChange={codeChange}
-                            name="code-input"
-                            editorProps={{ $blockScrolling: true }}
+                <div className="ide">
+                    <div className="ide-header">
+                        <SelectTags setLang={setLang} setFontSize={setFontSize} setTheme={setTheme} setMode={setMode}
+                            setDownloadExt={setDownloadExt}
                         />
-                        <div className="ide-controller">
-                            <div className="run-btn-container">
-                                <button className="run-btn" onClick={getAns}>Run</button>
+                        <div style={{ display: "flex" }}>
+                            <button onClick={codeCopy} className="copy-btn">Copy</button>
+                            <div onClick={downloadCode} style={{ marginRight: "15px" }}><i class="fas fa-download"></i></div>
+                        </div>
+                    </div>
+                    <div className="main-container">
+                        <div className="code-input-container">
+                            <AceEditor
+                                fontSize={fontSize}
+                                className="code-input"
+                                mode={mode}
+                                theme={theme}
+                                onChange={codeChange}
+                                name="code-input"
+                                editorProps={{ $blockScrolling: true }}
+                            />
+                            <div className="ide-controller">
+                                <div className="run-btn-container">
+                                    <button className="run-btn" onClick={getAns}>Run</button>
+                                </div>
+                                <div className="submit-btn-container">
+                                    <button className="submit-btn">Submit</button>
+                                </div>
                             </div>
-                            <div className="submit-btn-container">
-                                <button className="submit-btn">Submit</button>
+                        </div>
+                        <div className="in-out-container" style={{ display: "flex", flexDirection: "row" }}>
+                            <div style={{ display: "flex", flexDirection: "column" }}>
+                                <div className="output-header">
+                                    <label htmlFor="output-container">Input</label>
+                                    <button onClick={inputCopy} className="output-copy-btn">Copy</button>
+                                </div>
+                                <textarea className="input-container" id="input-container" spellCheck="false" onChange={inputChange} type="text"></textarea>
+                            </div>
+                            <div>
+                                <div className="output-header">
+                                    <label htmlFor="output-container">Output </label>
+                                    <button onClick={outputCopy} className="output-copy-btn">Copy</button>
+                                </div>
+                                <textarea className="output-container" id="output-container" spellCheck="false" type="text" value={output} disabled>
+                                    {output}
+                                </textarea>
                             </div>
                         </div>
                     </div>
-                    <div className="in-out-container" style={{ display: "flex", flexDirection: "row" }}>
-                        <div style={{ display: "flex", flexDirection: "column" }}>
-                            <div className="output-header">
-                                <label htmlFor="output-container">Input</label>
-                                <button onClick={inputCopy} className="output-copy-btn">Copy</button>
-                            </div>
-                            <textarea className="input-container" id="input-container" spellCheck="false" onChange={inputChange} type="text"></textarea>
-                        </div>
-                        <div>
-                            <div className="output-header">
-                                <label htmlFor="output-container">Output </label>
-                                <button onClick={outputCopy} className="output-copy-btn">Copy</button>
-                            </div>
-                            <textarea className="output-container" id="output-container" spellCheck="false" type="text" value={output} disabled>
-                                {output}
-                            </textarea>
-                        </div>
-                    </div>
+                    {runInfoShow && <RunInfo Status={Status} date={date} time={time} memory={mem} />}
                 </div>
-                {runInfoShow && <RunInfo Status={Status} date={date} time={time} memory={mem} />}
-            </div>
 
+            </div>
         </div>
     );
 }
-export default App;
+export default Ide;

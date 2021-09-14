@@ -1,0 +1,173 @@
+:root {
+  --pencil-bar-color: rgb(158, 158, 158);
+}
+
+.collapse {
+  transform: translateX(-100vw);
+}
+
+.canvas-controls-container {
+  display: flex;
+  width: 70vw;
+  justify-content: space-between;
+  background-color: rgb(221, 221, 221);
+  margin: auto;
+  padding: 10px;
+  border-radius: 10px;
+  border: rgb(216, 216, 216) 1px solid;
+}
+
+#canvas {
+  border: 1px solid black;
+  background-color: rgb(255, 255, 255);
+}
+
+.canvas-container {
+  transition: all 0.5s ease;
+  width: 70vw;
+  height: 70vh;
+  margin: auto;
+}
+
+#clear-canvas {
+  font-size: 1.3rem;
+  padding: 2px;
+  cursor: pointer;
+}
+
+#clear-canvas:active {
+  transform: scale(0.97);
+}
+
+.canvas-pencil-bar {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  transform: translate(-50%, 15px);
+  background-color: var(--pencil-bar-color);
+  border-radius: 5px;
+  padding: 10px;
+}
+.canvas-btn-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  position: relative;
+  margin: 10px;
+  background-color: white;
+}
+
+.canvas-pencil-line-container {
+}
+
+.line-large {
+  width: 30px;
+  height: 7px;
+  background-color: black;
+  margin: auto;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.line-medium {
+  width: 30px;
+  height: 5px;
+  background-color: black;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.line-small {
+  width: 30px;
+  height: 3px;
+  background-color: black;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.color-black {
+  background-color: black;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.color-red {
+  background-color: red;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.color-green {
+  background-color: green;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.shape-rect {
+  border: 2px solid black;
+  height: 100%;
+  width: 100%;
+}
+
+.shape-circle {
+  border: 2px solid black;
+  height: 100%;
+  width: 100%;
+  border-radius: 100%;
+}
+
+.shape-line {
+  width: 40px;
+  height: 3px;
+  background-color: black;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+.fa-pencil-alt {
+  box-shadow: rgb(255, 255, 255) 0 0 0px 7px;
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+}
+
+.fa-eraser {
+  box-shadow: rgb(255, 255, 255) 0 0 0px 7px;
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+}
+
+.selected {
+  background-color: black;
+  border-radius: 5px;
+  box-shadow: black 0 0 0px 7px;
+  color: white;
+}
+
+.display-none {
+  display: none;
+}
+.triangle-top {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent var(--pencil-bar-color) transparent;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(0, -100%);
+}
+/* rgb(223, 223, 223) */

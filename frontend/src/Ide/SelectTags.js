@@ -5,7 +5,7 @@ const SelectTags = ({ setLang, setFontSize, setTheme, setMode, setDownloadExt })
     const selectChangeLang = (e) => {
         const lang = e.target.value;
         const langext = LangData.exts[lang];
-        if (langext != undefined) {
+        if (langext !== undefined) {
             setDownloadExt(langext);
         }
         else {
