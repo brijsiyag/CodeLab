@@ -26,3 +26,8 @@ option {
   padding: 1.5px 5px 1.5px 3px;
   outline: none;
 }
+
+.SelectTags label {
+  margin: 10px;
+  font-size: 15px;
+}

@@ -5,6 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import green from "@material-ui/core/colors/green";
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -36,16 +37,8 @@ export default function ButtonAppBar() {
                     }`}
             >
                 <Toolbar>
-                    {/* <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="menu"
-                    >
-                        <MenuIcon />
-                    </IconButton> */}
                     <Typography variant="h6" className={classes.title}>
-                        <img src="./codelab.svg" width="150px" style={{ marginTop: "10px" }} alt="icon.svg"></img>
+                        <Link to={{ pathname: "/" }} ><img src="./codelab.svg" width="150px" style={{ marginTop: "10px", cursor: "pointer" }} alt="icon.svg"></img></Link>
                     </Typography>
                     <IconButton color="inherit">
                         Practice

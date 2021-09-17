@@ -1,5 +1,5 @@
 const getOutput = async (code, lang, input) => {
-    const res = await fetch('http://localhost:5000/', {
+    const res = await fetch('http://localhost:5000/submit', {
         method: 'POST',
         headers: {
             'Accept': 'application/json, text/plain, */*',

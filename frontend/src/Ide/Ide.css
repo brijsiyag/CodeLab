@@ -170,7 +170,7 @@
   outline: none;
 }
 
-label {
+.ide-body label {
   margin: 10px;
   font-size: 15px;
 }

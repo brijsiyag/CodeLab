@@ -21,7 +21,7 @@ const SelectTags = ({ setLang, setFontSize, setTheme, setMode, setDownloadExt })
         setTheme(e.target.value);
     }
     return (
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }} className="SelectTags">
             <div>
                 <label htmlFor="language" className="lang-label">Language:</label>
                 <select id='language' onChange={selectChangeLang} defaultValue="cpp17">
