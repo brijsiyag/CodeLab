@@ -13,4 +13,4 @@ const RunInfo = ({ Status, date, time, memory }) => {
     )
 }
 
-export default RunInfo
+export default RunInfo;

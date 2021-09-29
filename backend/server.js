@@ -6,6 +6,14 @@ const mysql = require("mysql");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const auth = require("./Middlewares/auth");
+
+
+// app.use(function (req, res, next) {
+//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000/');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//     next();
+// });
+console.clear();
 app.use(cors({
     origin: "http://localhost:3000",
     credentials: true,
@@ -14,8 +22,8 @@ app.use(cors({
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use("/submit", auth);
-app.use("/addquestion", auth);
+app.use(auth);
+
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -25,24 +33,43 @@ const connection = mysql.createConnection({
 
 
 app.get("/", (req, res) => {
+    console.log(req.cookies);
     res.send("Hiii");
 });
 
-app.post("/login", (req, res) => {
-    if (req.isAuthenticated) {
-        console.log("Authenticated....");
+
+app.get("/isAuth", (req, res) => {
+    console.log(req.cookies.Auth);
+    if (req.cookies !== undefined && req.cookies.Auth === 'true') {
+        res.send(true);
     }
     else {
-        console.log("Un Authenticated....");
+        res.send(false);
     }
-    res.status(200).cookie("LogedIn", true, { httpOnly: true, sameSite: "strict", path: "/login", expires: new Date(new Date().getTime() + 100 * 1000), secure: true }).send("Cookie Injected....");
 })
+
+app.post("/login", (req, res) => {
+    const userName = req.body.data.userName, password = req.body.data.password;
+    connection.query("SELECT * FROM user WHERE user_name = ? AND password = ?", [userName, password], (err, result) => {
+        if (result.length > 0) {
+            res.status(200).cookie("Auth", true, { httpOnly: true, sameSite: "strict"/*, path: "/login"*/, expires: new Date(new Date().getTime() + 100 * 1000) }).send(true);
+        }
+        else {
+            res.send(false);
+        }
+    });
+});
+
+
 
 app.get("/questions", (req, res) => {
     connection.query("SELECT * FROM question", (err, result) => {
         res.json(result);
     });
 });
+
+
+
 app.post("/addquestion", (req, res) => {
     connection.query(`INSERT INTO question VALUES('${req.body.question_id}', '${req.body.question}', '${req.body.output}', '${req.body.tags}', '${req.body.difficulty_level}', '${req.body.input}')`, (err, result) => {
         if (err) {
@@ -83,5 +110,5 @@ app.post("/submit", (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`Server is running on Port ${PORT}`);
+    console.log(`Server is running on Port ${PORT}....`);
 })

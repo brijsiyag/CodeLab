@@ -73,9 +73,6 @@ const Ide = () => {
     const codeChange = (code) => {
         setCode(code);
     }
-    const inputChange = (e) => {
-        setInput(e.target.value);
-    }
     const codeCopy = () => {
         navigator.clipboard.writeText(code);
     }
@@ -118,7 +115,7 @@ const Ide = () => {
                         />
                         <div style={{ display: "flex" }}>
                             <button onClick={codeCopy} className="copy-btn">Copy</button>
-                            <div onClick={downloadCode} style={{ marginRight: "15px" }}><i class="fas fa-download"></i></div>
+                            <div onClick={downloadCode} style={{ marginRight: "15px" }}><i className="fas fa-download"></i></div>
                         </div>
                     </div>
                     <div className="main-container">
@@ -147,7 +144,7 @@ const Ide = () => {
                                     <label htmlFor="output-container">Input</label>
                                     <button onClick={inputCopy} className="output-copy-btn">Copy</button>
                                 </div>
-                                <textarea className="input-container" id="input-container" spellCheck="false" onChange={inputChange} type="text"></textarea>
+                                <textarea className="input-container" id="input-container" spellCheck="false" onChange={(e) => { setInput(e.target.value) }} type="text"></textarea>
                             </div>
                             <div>
                                 <div className="output-header">

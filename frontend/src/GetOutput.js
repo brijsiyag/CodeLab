@@ -7,6 +7,7 @@ const getOutput = async (code, lang, input) => {
         },
         body: JSON.stringify({ code: code, lang: lang, input: input })
     });
+    console.log(res);
     const output = await res.json();
     if (output.statusCode >= 400 && output.statusCode < 500) {
         output.Status = output.error;

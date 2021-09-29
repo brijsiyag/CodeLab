@@ -52,8 +52,6 @@ const Canvas = () => {
                 shapeInitial.x = e.offsetX;
                 shapeInitial.y = e.offsetY;
             }
-
-            console.log(shape);
         });
         canvas.addEventListener("mouseenter", () => {
             canvas.style.cursor = cursor;
@@ -61,13 +59,11 @@ const Canvas = () => {
         canvas.addEventListener("mouseout", (e) => {
             drawing = false;
             ctx.beginPath();
-            console.log("Out");
             canvas.style.cursor = "default";
         });
         window.addEventListener("mouseup", (e) => {
             drawing = false;
             ctx.beginPath();
-            console.log("Up");
             if (!isPencil) {
                 if (shape === "rect") {
                     ctx.strokeStyle = pencilColor;
@@ -77,7 +73,6 @@ const Canvas = () => {
                     ctx.beginPath();
                 }
                 else if (shape === "line") {
-                    console.log("InlIne");
                     ctx.beginPath();
                     ctx.lineWidth = pencilSize;
                     ctx.strokeStyle = pencilColor;
@@ -196,7 +191,7 @@ const Canvas = () => {
                 <button id="clear-canvas">Clear</button>
                 <div >
                     <div>
-                        <i class="fas fa-pencil-alt pencil selected" onClick={pencilClickHandler}></i>
+                        <i className="fas fa-pencil-alt pencil selected" onClick={pencilClickHandler}></i>
                     </div>
                     <div className="canvas-pencil-bar display-none">
                         <div className="triangle-top"></div>
@@ -236,10 +231,10 @@ const Canvas = () => {
                     </div>
                 </div>
                 <div>
-                    <i class="fas fa-eraser eraser"></i>
+                    <i className="fas fa-eraser eraser"></i>
                 </div>
                 <a id="canvas-download" href="undefined" className="canvas-btn-containe">
-                    <i class="fas fa-download"></i>
+                    <i className="fas fa-download"></i>
                 </a>
             </div>
             <div className="canvas-container">

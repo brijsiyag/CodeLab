@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import axios from "axios";
+import { Redirect, useHistory } from 'react-router';
 axios.defaults.withCredentials = true;
 
 
@@ -33,16 +34,26 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
-    const handleSubmit = (event) => {
-        // event.preventDefault();
-        // const data = new FormData(event.currentTarget);
-        // // eslint-disable-next-line no-console
-        // console.log({
-        //     email: data.get('email'),
-        //     password: data.get('password'),
-        // });
-        axios.post("http://localhost:5000/login", { name: "Birju", password: "Prakash" }).then((res) => {
-            console.log(res.data);
+    const [userName, setUserName] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const history = useHistory();
+    const HandleSubmit = (event) => {
+        console.log(userName, password);
+        axios.post("http://localhost:5000/login", {
+            data: {
+                userName: userName,
+                password: password
+            }
+        }).then((res) => {
+            if (res.data === true) {
+                history.push("/");
+                sessionStorage.setItem("LoggedIn", true);
+            }
+            else {
+                setUserName("");
+                setPassword("");
+                alert("InValid Password....");
+            }
         }).catch(err => {
             console.log(err);
         });
@@ -68,7 +79,7 @@ export default function SignInSide() {
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Box sx={{ mt: 1 }}>
                             <TextField
                                 margin="normal"
                                 required
@@ -77,7 +88,9 @@ export default function SignInSide() {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                onChange={(e) => { setUserName(e.target.value) }}
                                 autoFocus
+                                value={userName}
                             />
                             <TextField
                                 margin="normal"
@@ -88,6 +101,8 @@ export default function SignInSide() {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={(e) => { setPassword(e.target.value) }}
+                                value={password}
                             />
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
@@ -98,7 +113,7 @@ export default function SignInSide() {
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
-                                onClick={handleSubmit}
+                                onClick={HandleSubmit}
                             >
                                 Sign In
                             </Button>
@@ -119,6 +134,6 @@ export default function SignInSide() {
                     </Box>
                 </Grid>
             </Grid>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }

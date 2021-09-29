@@ -1,5 +1,5 @@
 module.exports = (req, res, next) => {
-    if (req.cookies !== undefined && req.cookies.LogedIn === 'true') {
+    if (req.cookies !== undefined && req.cookies.Auth === 'true') {
         req.isAuthenticated = true;
         next();
     }
