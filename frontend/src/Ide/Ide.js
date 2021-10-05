@@ -1,6 +1,6 @@
-import React from "react"
-import { useState } from "react"
-import './Ide.css';
+import React from "react";
+import { useState } from "react";
+import "./Ide.css";
 import SelectTags from "./SelectTags";
 import RunInfo from "./RunInfo";
 import GetOutput from "../GetOutput";
@@ -57,111 +57,151 @@ import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/theme-xcode";
 
 const Ide = () => {
-    const [code, setCode] = useState("");
-    const [lang, setLang] = useState("cpp17");
-    const [mode, setMode] = useState("c_cpp")
-    const [input, setInput] = useState("");
-    const [output, setOutput] = useState("");
-    const [fontSize, setFontSize] = useState("14pt")
-    const [Status, setStatus] = useState("-")
-    const [date, setDate] = useState("-")
-    const [time, setTime] = useState("-")
-    const [mem, setMem] = useState("-")
-    const [theme, setTheme] = useState("xcode")
-    const [runInfoShow, setRunInfoShow] = useState(false)
-    const [downloadExt, setDownloadExt] = useState(".cpp")
-    const codeChange = (code) => {
-        setCode(code);
+  const [code, setCode] = useState("");
+  const [lang, setLang] = useState("cpp17");
+  const [mode, setMode] = useState("c_cpp");
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [fontSize, setFontSize] = useState("14pt");
+  const [Status, setStatus] = useState("-");
+  const [date, setDate] = useState("-");
+  const [time, setTime] = useState("-");
+  const [mem, setMem] = useState("-");
+  const [theme, setTheme] = useState("xcode");
+  const [runInfoShow, setRunInfoShow] = useState(false);
+  const [downloadExt, setDownloadExt] = useState(".cpp");
+  const codeChange = (code) => {
+    setCode(code);
+  };
+  const codeCopy = () => {
+    navigator.clipboard.writeText(code);
+  };
+  const outputCopy = () => {
+    navigator.clipboard.writeText(output);
+  };
+  const inputCopy = () => {
+    navigator.clipboard.writeText(input);
+  };
+  const getAns = async () => {
+    setOutput("");
+    setRunInfoShow(false);
+    const res = await GetOutput(code, lang, input);
+    if (res.statusCode >= 400 && res.statusCode < 500) {
+      res.Status = res.error;
+    } else {
+      res.Status = "Successful";
     }
-    const codeCopy = () => {
-        navigator.clipboard.writeText(code);
-    }
-    const outputCopy = () => {
-        navigator.clipboard.writeText(output);
-    }
-    const inputCopy = () => {
-        navigator.clipboard.writeText(input);
-    }
-    const getAns = async () => {
-        setOutput("");
-        setRunInfoShow(false);
-        const res = await GetOutput(code, lang, input);
-        setOutput(res.output);
-        setStatus(res.Status);
-        setTime(res.cpuTime || 0);
-        setMem(res.memory || 0);
-        setDate(res.date);
-        setRunInfoShow(true);
-    }
-    const downloadCode = () => {
-        const element = document.createElement("a");
-        const file = new Blob([code], { type: 'text/plain' });
-        element.href = URL.createObjectURL(file);
-        element.download = `code${downloadExt}`;
-        document.body.appendChild(element); // Required for this to work in FireFox
-        element.click();
-    }
-    return (
-        <div className="ide-body">
-            <div className="ide-container">
-                <div className="intro">
-                    <div className="ide-heading">Code, Compile & Run</div>
-                    Compile & run your code with the CodeLab online IDE. Our online compiler supports multiple programming languages like Python, C++, C, Kotlin, NodeJS, and many more.
-                </div>
-                <div className="ide">
-                    <div className="ide-header">
-                        <SelectTags setLang={setLang} setFontSize={setFontSize} setTheme={setTheme} setMode={setMode}
-                            setDownloadExt={setDownloadExt}
-                        />
-                        <div style={{ display: "flex" }}>
-                            <button onClick={codeCopy} className="copy-btn">Copy</button>
-                            <div onClick={downloadCode} style={{ marginRight: "15px" }}><i className="fas fa-download"></i></div>
-                        </div>
-                    </div>
-                    <div className="main-container">
-                        <div className="code-input-container">
-                            <AceEditor
-                                fontSize={fontSize}
-                                className="code-input"
-                                mode={mode}
-                                theme={theme}
-                                onChange={codeChange}
-                                name="code-input"
-                                editorProps={{ $blockScrolling: true }}
-                            />
-                            <div className="ide-controller">
-                                <div className="run-btn-container">
-                                    <button className="run-btn" onClick={getAns}>Run</button>
-                                </div>
-                                <div className="submit-btn-container">
-                                    <button className="submit-btn">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="in-out-container" style={{ display: "flex", flexDirection: "row" }}>
-                            <div style={{ display: "flex", flexDirection: "column" }}>
-                                <div className="output-header">
-                                    <label htmlFor="output-container">Input</label>
-                                    <button onClick={inputCopy} className="output-copy-btn">Copy</button>
-                                </div>
-                                <textarea className="input-container" id="input-container" spellCheck="false" onChange={(e) => { setInput(e.target.value) }} type="text"></textarea>
-                            </div>
-                            <div>
-                                <div className="output-header">
-                                    <label htmlFor="output-container">Output </label>
-                                    <button onClick={outputCopy} className="output-copy-btn">Copy</button>
-                                </div>
-                                <textarea className="output-container" id="output-container" spellCheck="false" type="text" value={output} disabled>
-                                    {output}
-                                </textarea>
-                            </div>
-                        </div>
-                    </div>
-                    {runInfoShow && <RunInfo Status={Status} date={date} time={time} memory={mem} />}
-                </div>
-
-            </div>
+    setOutput(res.output);
+    setStatus(res.Status);
+    setTime(res.cpuTime || 0);
+    setMem(res.memory || 0);
+    setDate(res.date);
+    setRunInfoShow(true);
+  };
+  const downloadCode = () => {
+    const element = document.createElement("a");
+    const file = new Blob([code], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = `code${downloadExt}`;
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+  return (
+    <div className="ide-body">
+      <div className="ide-container">
+        <div className="intro">
+          <div className="ide-heading">Code, Compile & Run</div>
+          Compile & run your code with the CodeLab online IDE. Our online
+          compiler supports multiple programming languages like Python, C++, C,
+          Kotlin, NodeJS, and many more.
         </div>
-    );
-}
+        <div className="ide">
+          <div className="ide-header">
+            <SelectTags
+              setLang={setLang}
+              setFontSize={setFontSize}
+              setTheme={setTheme}
+              setMode={setMode}
+              setDownloadExt={setDownloadExt}
+            />
+            <div style={{ display: "flex" }}>
+              <button onClick={codeCopy} className="copy-btn">
+                Copy
+              </button>
+              <div onClick={downloadCode} style={{ marginRight: "15px" }}>
+                <i className="fas fa-download"></i>
+              </div>
+            </div>
+          </div>
+          <div className="main-container">
+            <div className="code-input-container">
+              <AceEditor
+                fontSize={fontSize}
+                className="code-input"
+                mode={mode}
+                theme={theme}
+                onChange={codeChange}
+                name="code-input"
+                editorProps={{ $blockScrolling: true }}
+              />
+              <div className="ide-controller">
+                <div className="run-btn-container">
+                  <button className="run-btn" onClick={getAns}>
+                    Run
+                  </button>
+                </div>
+                <div className="submit-btn-container">
+                  <button className="submit-btn">Submit</button>
+                </div>
+              </div>
+            </div>
+            <div
+              className="in-out-container"
+              style={{ display: "flex", flexDirection: "row" }}
+            >
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div className="output-header">
+                  <label htmlFor="output-container">Input</label>
+                  <button onClick={inputCopy} className="output-copy-btn">
+                    Copy
+                  </button>
+                </div>
+                <textarea
+                  className="input-container"
+                  id="input-container"
+                  spellCheck="false"
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                  }}
+                  type="text"
+                ></textarea>
+              </div>
+              <div>
+                <div className="output-header">
+                  <label htmlFor="output-container">Output </label>
+                  <button onClick={outputCopy} className="output-copy-btn">
+                    Copy
+                  </button>
+                </div>
+                <textarea
+                  className="output-container"
+                  id="output-container"
+                  spellCheck="false"
+                  type="text"
+                  value={output}
+                  disabled
+                >
+                  {output}
+                </textarea>
+              </div>
+            </div>
+          </div>
+          {runInfoShow && (
+            <RunInfo Status={Status} date={date} time={time} memory={mem} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 export default Ide;

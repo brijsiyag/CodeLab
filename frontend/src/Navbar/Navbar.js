@@ -5,7 +5,11 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import green from "@material-ui/core/colors/green";
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link, useHistory } from 'react-router-dom';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -25,10 +29,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ButtonAppBar() {
+    let History = useHistory();
     const classes = useStyles();
     const example = "default";
     const isCustomColor = example === "customColor";
     const isCustomHeight = example === "customHeight";
+    const [loggedIn, setloggedIn] = React.useState(sessionStorage.getItem("LoggedIn") === 'true' ? true : false);
+
+    const loginClickHandler = () => {
+        if (sessionStorage.getItem("LoggedIn") === 'true') {
+            setloggedIn(false)
+            sessionStorage.removeItem("LoggedIn");
+        }
+        else {
+            History.push("/login");
+        }
+    }
+
+
     return (
         <React.Fragment>
             <AppBar
@@ -49,6 +67,7 @@ export default function ButtonAppBar() {
                     <IconButton color="inherit">
                         Contact Us
                     </IconButton>
+                    <Button variant="contained" onClick={loginClickHandler}>{loggedIn ? <AccountBoxIcon /> : "LogIn"}</Button>
                 </Toolbar>
             </AppBar>
             <Toolbar />

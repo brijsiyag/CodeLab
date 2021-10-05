@@ -1,0 +1,29 @@
+.leaderboard-container {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+}
+
+.leaderboard-container thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  border-radius: 5px;
+}
+
+.leaderboard-container th,
+.leaderboard-container td {
+  padding: 12px 15px;
+}
+
+.table-heading {
+  font-size: 1.3rem;
+  background-color: #ffffff;
+  color: black;
+  margin: auto;
+  text-align: center;
+}

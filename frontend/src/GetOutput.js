@@ -1,20 +1,21 @@
-const getOutput = async (code, lang, input) => {
-    const res = await fetch('http://localhost:5000/submit', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({ code: code, lang: lang, input: input })
+import Axios from "axios";
+Axios.defaults.withCredentials = true;
+const getOutput = async (code, lang, input, question_id) => {
+  try {
+    const res = await Axios({
+      url: "http://localhost:5000/submit",
+      method: "post",
+      data: {
+        code: code,
+        lang: lang,
+        input: input,
+        question_id: question_id,
+      },
+      withCredentials: true,
     });
-    console.log(res);
-    const output = await res.json();
-    if (output.statusCode >= 400 && output.statusCode < 500) {
-        output.Status = output.error;
-    }
-    else {
-        output.Status = "Successful";
-    }
-    return output;
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 export default getOutput;
