@@ -1,4 +1,17 @@
+
 .carousel-img {
   width: 70vw;
   height: 30vw;
+}
+.carousel_caption{
+  padding: 3px;
+  padding-top: 8px;
+}
+
+.carousel_caption h3{
+  text-align: right;
+  color: white;
+  font-size: 15px;
+  font-family: 'Montserrat', sans-serif;
+  padding-right: 20px;
 }
