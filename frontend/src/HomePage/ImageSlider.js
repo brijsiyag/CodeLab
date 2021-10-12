@@ -22,9 +22,9 @@ function ControlledCarousel() {
           background: "black"
         }}
       >
-        <Carousel>
+        <Carousel fade controls={false}>
 
-          <Carousel.Item interval={1000}>
+          <Carousel.Item interval={2000}>
             <img
               className="d-block carousel-img"
               src={img_arr[0]}
@@ -33,7 +33,7 @@ function ControlledCarousel() {
             <div className="carousel_caption"><h3>{quote_arr[0]}</h3></div>
           </Carousel.Item>
 
-          <Carousel.Item interval={1000}>
+          <Carousel.Item interval={2000}>
             <img
               className="d-block carousel-img"
               src={img_arr[1]}
