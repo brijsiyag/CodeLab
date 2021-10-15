@@ -88,9 +88,10 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  color: white;
 }
 
 .question-submit:active {
-  color: black;
+  color: white;
   transform: scale(0.97);
 }

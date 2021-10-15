@@ -7,15 +7,18 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+
 import HomePage from "./HomePage/HomePage";
 import Login from "./Login/Login";
 import Ide from "./Ide/Ide";
-import Question from "./Question/Question";
+import Questions from "./Questions/Questions";
 import Navbar from "./Navbar/Navbar";
 import QuestionAdd from "./AdminControls/QuestionAdd";
-import Notificaion from "./Notification";
 import Footer from "./Footer/Footer";
 import Axios from "axios";
+import Question from "./Question/Question";
+import SignUp from "./SignUp/SignUp";
+import CookieConsent from "./Cookie_Consent";
 Axios.defaults.withCredentials = true;
 
 function App() {
@@ -28,7 +31,9 @@ function App() {
         console.log(err);
       });
   }, []);
+
   const isAuth = () => {
+    console.log(sessionStorage.getItem("LoggedIn"));
     if (sessionStorage.getItem("LoggedIn") === "true") {
       return true;
     } else {
@@ -40,18 +45,24 @@ function App() {
     <div>
       <Router>
         <Navbar />
-        <Notificaion />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route exact path="/questions" component={Question}></Route>
+          <Route exact path="/question" component={Questions}></Route>
+          <Route
+            exact
+            path="/question/:question_id"
+            component={Question}
+          ></Route>
           <Route
             exact
             path="/add-question"
-            render={() => (true ? <QuestionAdd /> : <Redirect to="/login" />)}
+            render={() =>
+              isAuth() ? <QuestionAdd /> : <Redirect to="/login" />
+            }
           />
           <Route
             exact
-            path="/ide/:id"
+            path="/ide/:question_id"
             render={() => (isAuth() ? <Ide /> : <Redirect to="/login" />)}
           />
           <Route
@@ -59,12 +70,18 @@ function App() {
             path="/login"
             render={() => (isAuth() ? <Redirect to="/" /> : <Login />)}
           />
+          <Route
+            exact
+            path="/signup"
+            render={() => (isAuth() ? <Redirect to="/" /> : <SignUp />)}
+          />
 
           <Route exact path="/ide" component={Ide}></Route>
           <Route path="*" component={Ide}></Route>
         </Switch>
         <Footer />
       </Router>
+      <CookieConsent />
     </div>
   );
 }

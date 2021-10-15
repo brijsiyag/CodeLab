@@ -1,0 +1,26 @@
+.recent-updates-container {
+  border: rgb(189, 189, 189) solid 1px;
+  flex-grow: 1;
+  margin: 25px;
+  border-radius: 5px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recent-updates-heading {
+  text-decoration: underline;
+  text-decoration-color: gray;
+  text-decoration-thickness: 2px;
+}
+
+.recent-updates-ul {
+  height: 100%;
+  width: 100%;
+}
+
+.recent-updates-li {
+  padding: 10px;
+  font-size: large;
+}

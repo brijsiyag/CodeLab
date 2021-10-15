@@ -26,7 +26,6 @@ const connection = mysql.createConnection({
 });
 
 app.get("/isAuth", (req, res) => {
-  console.log(req.cookies.Auth);
   if (req.cookies !== undefined && req.cookies.Auth === "true") {
     res.send(true);
   } else {
@@ -62,6 +61,12 @@ app.post("/login", (req, res) => {
   );
 });
 
+app.get("/logout", (req, res) => {
+  res.clearCookie("Auth");
+  res.clearCookie("user_name");
+  res.sendStatus(200);
+});
+
 app.get("/leaderboard", (req, res) => {
   connection.query("SELECT user_name,rating FROM user", (err, result) => {
     if (err) {
@@ -84,6 +89,16 @@ app.get("/questions", (req, res) => {
   });
 });
 
+app.get("/question/:id", (req, res) => {
+  connection.query(
+    "SELECT * FROM question WHERE question_id = ?",
+    [req.params.id],
+    (err, result) => {
+      res.send(result[0]);
+    }
+  );
+});
+
 app.get("/submissions", (req, res) => {
   connection.query(
     "SELECT * FROM question_details WHERE user_name = ?",
@@ -104,6 +119,41 @@ app.post("/addquestion", (req, res) => {
         res.send({ ...err, error: true });
       } else {
         res.send({ ...result, error: false });
+      }
+    }
+  );
+});
+
+app.post("/run", (req, res) => {
+  const program = {
+    script: req.body.code,
+    language: req.body.lang,
+    stdin: req.body.input,
+    versionIndex: "0",
+    clientId: process.env.JDoodle_Client_Id,
+    clientSecret: process.env.JDoodle_Client_Secret,
+  };
+  request(
+    {
+      url: "https://api.jdoodle.com/v1/execute",
+      method: "POST",
+      json: program,
+    },
+    function (error, response, body) {
+      let data = { ...body };
+      if (error) {
+        console.log(error);
+      } else {
+        data.date = response.headers.date;
+        connection.query(
+          "SELECT * FROM questions WHERE question_id = ?",
+          [req.body.question_id],
+          (err, result) => {
+            console.log(result);
+          }
+        );
+        res.send(data);
+        console.log(data);
       }
     }
   );
@@ -139,7 +189,6 @@ app.post("/submit", (req, res) => {
           }
         );
         res.send(data);
-        console.log(data);
       }
     }
   );

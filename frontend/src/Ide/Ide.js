@@ -5,7 +5,8 @@ import SelectTags from "./SelectTags";
 import RunInfo from "./RunInfo";
 import GetOutput from "../GetOutput";
 import AceEditor from "react-ace";
-
+import { useParams } from "react-router";
+import notification from "../notification";
 //Syntax Highlighters
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
@@ -57,6 +58,7 @@ import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/theme-xcode";
 
 const Ide = () => {
+  const { question_id } = useParams();
   const [code, setCode] = useState("");
   const [lang, setLang] = useState("cpp17");
   const [mode, setMode] = useState("c_cpp");
@@ -85,7 +87,7 @@ const Ide = () => {
   const getAns = async () => {
     setOutput("");
     setRunInfoShow(false);
-    const res = await GetOutput(code, lang, input);
+    const res = await GetOutput(code, lang, input, question_id);
     if (res.statusCode >= 400 && res.statusCode < 500) {
       res.Status = res.error;
     } else {

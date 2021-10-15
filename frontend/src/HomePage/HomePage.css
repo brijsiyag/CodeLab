@@ -1,0 +1,28 @@
+.home-page-top-page {
+  display: flex;
+}
+
+.home-page-top-page-image {
+  width: 50vw;
+  height: auto;
+}
+
+.home-page-top-page-heading {
+  font-size: 4rem;
+  color: rgb(97, 97, 97);
+}
+.home-page-top-page-heading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+.home-page-top-page-heading-quote {
+  color: rgb(146, 146, 146);
+}
+
+.home-page-middle-container {
+  display: flex;
+}

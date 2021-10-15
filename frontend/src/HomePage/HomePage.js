@@ -1,13 +1,28 @@
 import React from "react";
-import ImageSlider from "./ImageSlider";
 import LeaderBoard from "./LeaderBoard";
-import PieChart from "../Profile/PieChart";
+import RecentUpdates from "./RecentUpdates";
+import "./HomePage.css";
 const HomePage = () => {
   return (
     <div style={{ marginTop: "50px" }}>
-      <ImageSlider />
-      <LeaderBoard />
-      <PieChart />
+      <div className="home-page-top-page">
+        <img
+          src="./HomePageMain.svg"
+          className="home-page-top-page-image"
+        ></img>
+        <div className="home-page-top-page-heading-container">
+          <div>
+            <div className="home-page-top-page-heading">CodeLab</div>
+            <div className="home-page-top-page-heading-quote">
+              One stop destination for competitive programming
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="home-page-middle-container">
+        <LeaderBoard />
+        <RecentUpdates />
+      </div>
     </div>
   );
 };
