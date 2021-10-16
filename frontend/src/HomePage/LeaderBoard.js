@@ -28,7 +28,7 @@ const LeaderBoard = () => {
             return (
               <tr>
                 <td>{index + 1}</td>
-                <td>{element.user_name}</td>
+                <td>{element.username}</td>
                 <td>{element.rating}</td>
               </tr>
             );

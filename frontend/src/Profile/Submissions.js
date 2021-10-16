@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import Chart from "react-google-charts";
 import Axios from "axios";
 
@@ -11,13 +10,13 @@ const pieOptions = {
       color: "#2BB673",
     },
     {
-      color: "#d91e48",
-    },
-    {
       color: "#007fad",
     },
     {
       color: "#e9a227",
+    },
+    {
+      color: "#d91e48",
     },
   ],
   legend: {
@@ -39,30 +38,24 @@ const pieOptions = {
   },
   fontName: "Roboto",
 };
-const PieChart = () => {
-  const [data, setData] = React.useState({ ac: 50, wa: 50 });
-  React.useEffect(() => {
-    Axios.get("/submissions").then((response) => {
-      setData(response.data);
-    });
-  }, []);
+const Submissions = ({ ac, wa }) => {
   return (
     <div className="App">
       <Chart
         chartType="PieChart"
         data={[
           ["Age", "Weight"],
-          ["Accepted", data.wa],
-          ["Wrond Answer", data.ac],
+          ["Accepted", ac],
+          ["Wrond Answer", wa],
         ]}
         options={pieOptions}
         graph_id="PieChart"
         width={"100%"}
-        height={"400px"}
+        height={"100%"}
         legend_toggle
       />
     </div>
   );
 };
 
-export default PieChart;
+export default Submissions;

@@ -12,7 +12,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Axios from "axios";
+import { Redirect, useHistory } from "react-router";
+Axios.defaults.withCredentials = true;
 function Copyright(props) {
   return (
     <Typography
@@ -34,14 +39,47 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const [gender, setGender] = React.useState("Male");
+  const [profession, setProfession] = React.useState("Student");
+  const History = useHistory();
+  const genderChangeHandler = (event) => {
+    setGender(event.target.value);
+  };
+  const professionChangeHandler = (event) => {
+    setProfession(event.target.value);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const data = {
+      name: formData.get("name"),
+      username: formData.get("username"),
+      gender: formData.get("gender"),
+      country: formData.get("country"),
+      state: formData.get("state"),
+      city: formData.get("city"),
+      profession: formData.get("profession"),
+      institute: formData.get("institute"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    console.log(data);
+    Axios.post("http://localhost:5000/signup", {
+      data: { ...data },
+    })
+      .then((res) => {
+        if (res.data.success === true) {
+          sessionStorage.setItem("LoggedIn", true);
+          History.push(-1);
+        } else {
+          alert(res.data.msg);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        History.push("/");
+      });
   };
 
   return (
@@ -69,14 +107,13 @@ export default function SignUp() {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <TextField
-                  autoComplete="fname"
-                  name="firstName"
+                  name="name"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="name"
+                  label="Name"
                   autoFocus
                 />
               </Grid>
@@ -84,10 +121,73 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="lname"
+                  id="username"
+                  label="username"
+                  name="username"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Select
+                  id="gender"
+                  value={gender}
+                  name="gender"
+                  fullWidth
+                  onChange={genderChangeHandler}
+                >
+                  <MenuItem id="male" value={"Male"}>
+                    Male
+                  </MenuItem>
+                  <MenuItem id="female" value={"Female"}>
+                    Female
+                  </MenuItem>
+                </Select>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="country"
+                  label="Country"
+                  name="country"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="state"
+                  label="State"
+                  name="state"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="city"
+                  label="City"
+                  name="city"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Select
+                  id="profession"
+                  value={profession}
+                  fullWidth
+                  onChange={professionChangeHandler}
+                  name="profession"
+                >
+                  <MenuItem value={"Student"}>Student</MenuItem>
+                  <MenuItem value={"Professional"}>Professional</MenuItem>
+                </Select>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="institute"
+                  label="Institute"
+                  name="institute"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -116,7 +216,7 @@ export default function SignUp() {
                   control={
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  label="I agree to the Terms and Conditions"
                 />
               </Grid>
             </Grid>
@@ -125,12 +225,19 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              id="signup-btn"
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link
+                  variant="body2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    History.push("/login");
+                  }}
+                >
                   Already have an account? Sign in
                 </Link>
               </Grid>

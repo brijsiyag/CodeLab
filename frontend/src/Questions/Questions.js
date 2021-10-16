@@ -1,9 +1,7 @@
 import * as React from "react";
-import { checkGridRowIdIsValid, DataGrid, GridRow } from "@mui/x-data-grid";
-import data from "./QuestionDB";
+import { DataGrid } from "@mui/x-data-grid";
 import { useHistory } from "react-router-dom";
-import { TableRow } from "@material-ui/core";
-import { blue } from "@material-ui/core/colors";
+import Axios from "axios";
 const columns = [
   { field: "name", headerName: "Name", width: 200 },
   { field: "id", headerName: "Id", width: 200, sortable: false },
@@ -14,7 +12,7 @@ const columns = [
     type: "number",
   },
   {
-    field: "tag",
+    field: "tags",
     headerName: "Tag",
     width: 200,
   },
@@ -24,10 +22,22 @@ const columns = [
     width: 200,
   },
 ];
-
-const rows = [...data];
-
 export default function DataTable() {
+  const [rows, setRows] = React.useState([]);
+  React.useEffect(() => {
+    Axios.get("http://localhost:5000/questions")
+      .then((res) => {
+        res.data.forEach((element) => {
+          element.id = element.question_id;
+        });
+        console.log(res.data);
+        setRows(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  React.useEffect(() => {}, [rows]);
   const History = useHistory();
   return (
     <div

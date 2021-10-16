@@ -6,7 +6,11 @@ import RunInfo from "./RunInfo";
 import GetOutput from "../GetOutput";
 import AceEditor from "react-ace";
 import { useParams } from "react-router";
-import notification from "../notification";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 //Syntax Highlighters
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
@@ -72,6 +76,22 @@ const Ide = () => {
   const [theme, setTheme] = useState("xcode");
   const [runInfoShow, setRunInfoShow] = useState(false);
   const [downloadExt, setDownloadExt] = useState(".cpp");
+  const createNotification = (type, message, title) => {
+    switch (type) {
+      case "info":
+        NotificationManager.info(title);
+        break;
+      case "success":
+        NotificationManager.success(message, title);
+        break;
+      case "warning":
+        NotificationManager.warning(message, title, 3000);
+        break;
+      case "error":
+        NotificationManager.error(message, title, 5000);
+        break;
+    }
+  };
   const codeChange = (code) => {
     setCode(code);
   };
@@ -84,21 +104,50 @@ const Ide = () => {
   const inputCopy = () => {
     navigator.clipboard.writeText(input);
   };
-  const getAns = async () => {
-    setOutput("");
-    setRunInfoShow(false);
-    const res = await GetOutput(code, lang, input, question_id);
-    if (res.statusCode >= 400 && res.statusCode < 500) {
-      res.Status = res.error;
+  const getAns = async (e) => {
+    if (e.target.className === "run-btn") {
+      setOutput("");
+      setRunInfoShow(false);
+      const res = await GetOutput(code, lang, input, question_id, "run");
+      if (res.statusCode >= 400 && res.statusCode < 500) {
+        res.Status = res.error;
+      } else {
+        res.Status = "Successful";
+      }
+      setOutput(res.output);
+      setStatus(res.Status);
+      setTime(res.cpuTime || 0);
+      setMem(res.memory || 0);
+      setDate(res.date);
+      setRunInfoShow(true);
     } else {
-      res.Status = "Successful";
+      setOutput("");
+      setRunInfoShow(false);
+      const res = await GetOutput(code, lang, input, question_id, "submit");
+      console.log(res);
+      if (res.success === false) {
+        alert("Please try again!!");
+      } else {
+        if (res.statusCode >= 400 && res.statusCode < 500) {
+          res.Status = res.error;
+        } else {
+          res.Status = "Successful";
+        }
+        setOutput(res.output);
+        setStatus(res.Status);
+        setTime(res.cpuTime || 0);
+        setMem(res.memory || 0);
+        setDate(res.date);
+        setRunInfoShow(true);
+        createNotification(
+          res.status === "AC" ? "success" : "error",
+          res.status === "AC"
+            ? "All Test Cases Passed"
+            : "Some Test cases not Passed",
+          res.status === "AC" ? "Accepted" : "Wrong Answer"
+        );
+      }
     }
-    setOutput(res.output);
-    setStatus(res.Status);
-    setTime(res.cpuTime || 0);
-    setMem(res.memory || 0);
-    setDate(res.date);
-    setRunInfoShow(true);
   };
   const downloadCode = () => {
     const element = document.createElement("a");
@@ -153,7 +202,13 @@ const Ide = () => {
                   </button>
                 </div>
                 <div className="submit-btn-container">
-                  <button className="submit-btn">Submit</button>
+                  <button
+                    className="submit-btn"
+                    onClick={getAns}
+                    hidden={question_id === undefined}
+                  >
+                    Submit
+                  </button>
                 </div>
               </div>
             </div>
@@ -203,6 +258,7 @@ const Ide = () => {
           )}
         </div>
       </div>
+      <NotificationContainer />
     </div>
   );
 };

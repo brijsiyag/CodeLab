@@ -27,20 +27,20 @@ const Question = () => {
         <div className="question-body">{questionData.question}</div>
         <div className="question-input-container">
           <h3>Input</h3>
-          <div className="question-input">{questionData.input}</div>
+          <div className="question-input">{questionData.input_detail}</div>
         </div>
         <div className="question-output-container">
           <h3>Output</h3>
-          <div className="question-output">{questionData.output}</div>
+          <div className="question-output">{questionData.output_detail}</div>
         </div>
         <div className="question-sample-in-out">
           <h3 className="question-sample-input-heading">Input</h3>
           <div className="question-sample-input">
-            {questionData.sampleInput}
+            {questionData.sample_input}
           </div>
           <h3 className="question-sample-output-heading">Output</h3>
           <div className="question-sample-output">
-            {questionData.sampleOutput}
+            {questionData.sample_output}
           </div>
         </div>
         <Link

@@ -5,16 +5,11 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import green from "@material-ui/core/colors/green";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Link,
-  useHistory,
-} from "react-router-dom";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import { BrowserRouter as Link, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import Axios from "axios";
+import logo from "./codelab.svg";
+Axios.defaults.withCredentials = true;
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -45,13 +40,25 @@ export default function ButtonAppBar() {
 
   const loginClickHandler = () => {
     if (sessionStorage.getItem("LoggedIn") === "true") {
-      setloggedIn(false);
-      sessionStorage.removeItem("LoggedIn");
+      Axios.get("http://localhost:5000/logout")
+        .then((res) => {
+          console.log(res.data);
+          if (res.data) {
+            document.querySelector("#navbar-log-in-out-btn").innerText =
+              "LogIn";
+            sessionStorage.removeItem("LoggedIn");
+            alert("Successfuly Logged Out!!");
+          } else {
+            alert("Ooops! Something Went Wrong!!!");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       History.push("/login");
     }
   };
-
   return (
     <React.Fragment>
       <AppBar
@@ -64,7 +71,7 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             <Link to={{ pathname: "/" }}>
               <img
-                src="./codelab.svg"
+                src={logo}
                 width="150px"
                 style={{ marginTop: "10px", cursor: "pointer" }}
                 alt="icon.svg"
@@ -81,7 +88,11 @@ export default function ButtonAppBar() {
           </IconButton>
           <IconButton color="inherit">About Us</IconButton>
           <IconButton color="inherit">Contact Us</IconButton>
-          <Button variant="contained" onClick={loginClickHandler}>
+          <Button
+            variant="contained"
+            onClick={loginClickHandler}
+            id="navbar-log-in-out-btn"
+          >
             {loggedIn ? "Log Out" : "LogIn"}
           </Button>
         </Toolbar>

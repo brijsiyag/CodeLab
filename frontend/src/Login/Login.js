@@ -13,7 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import axios from "axios";
-import { Redirect, useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 axios.defaults.withCredentials = true;
 
 function Copyright(props) {
@@ -51,7 +51,10 @@ export default function SignInSide() {
       .then((res) => {
         if (res.data === true) {
           sessionStorage.setItem("LoggedIn", true);
+          document.querySelector("#navbar-log-in-out-btn").innerText =
+            "Log Out";
           History.push(-1);
+          // window.location.reload();
         } else {
           setUserName("");
           setPassword("");
@@ -131,6 +134,7 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 onClick={HandleSubmit}
+                id="signin-btn"
               >
                 Sign In
               </Button>
@@ -141,7 +145,13 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link
+                    variant="body2"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      History.push("/signup");
+                    }}
+                  >
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

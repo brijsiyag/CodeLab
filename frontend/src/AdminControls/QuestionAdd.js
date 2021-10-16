@@ -4,11 +4,14 @@ import "./QuestionAdd.css";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Grid from "@mui/material/Grid";
 import {
   NotificationContainer,
   NotificationManager,
 } from "react-notifications";
+import Axios from "axios";
 import "react-notifications/lib/notifications.css";
+Axios.defaults.withCredentials = true;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,11 +25,17 @@ const useStyles = makeStyles((theme) => ({
 const QuestionAdd = () => {
   const classes = useStyles();
   const [question_id, setQuestion_id] = useState("");
+  const [name, setName] = useState("");
   const [question, setQuestion] = useState("");
+  const [outputDetails, setOutputDetails] = useState("");
+  const [inputDetails, setInputDetails] = useState("");
+  const [sampleOutput, setSampleOutput] = useState("");
+  const [sampleInput, setSampleInput] = useState("");
   const [output, setOutput] = useState("");
-  const [tags, setTags] = useState("");
-  const [difficulty_level, setDifficulty_level] = useState("");
   const [input, setInput] = useState("");
+  const [tags, setTags] = useState("");
+  const [author, setAuthor] = useState("");
+  const [difficulty_level, setDifficulty_level] = useState("");
 
   const createNotification = (type, message, title) => {
     switch (type) {
@@ -46,28 +55,54 @@ const QuestionAdd = () => {
   };
 
   const submitHandler = async () => {
-    const res = await fetch("http://localhost:5000/addQuestion", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        question: question,
-        question_id: question_id,
-        input: input,
-        output: output,
-        tags: tags,
-        difficulty_level: difficulty_level,
-      }),
+    Axios.post("http://localhost:5000/addQuestion", {
+      question: question,
+      question_id: question_id,
+      sampleInput: sampleInput,
+      sampleOutput: sampleOutput,
+      inputDetails: inputDetails,
+      outputDetails: outputDetails,
+      input: input,
+      output: output,
+      author: author,
+      tags: tags,
+      difficulty_level: difficulty_level,
+      name: name,
+    }).then((res) => {
+      if (res.data.error === true) {
+        createNotification("error", "Duplicate Question Id", "Error");
+      } else {
+        createNotification("success", "Question Added Successfuly", "Success");
+      }
     });
-    const result = await res.json();
-    console.log(result);
-    if (result.error === true) {
-      createNotification("error", "Duplicate Question Id", "Error");
-    } else {
-      createNotification("success", "Question Added Successfuly", "Success");
-    }
+    // const res = await fetch("http://localhost:5000/addQuestion", {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json, text/plain, */*",
+    //     "Content-type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     question: question,
+    //     question_id: question_id,
+    //     sampleInput: sampleInput,
+    //     sampleOutput: sampleOutput,
+    //     inputDetails: inputDetails,
+    //     outputDetails: outputDetails,
+    //     input: input,
+    //     output: output,
+    //     author: author,
+    //     tags: tags,
+    //     difficulty_level: difficulty_level,
+    //     name: name,
+    //   }),
+    // });
+    // const result = await res.json();
+    // console.log(result);
+    // if (result.error === true) {
+    //   createNotification("error", "Duplicate Question Id", "Error");
+    // } else {
+    //   createNotification("success", "Question Added Successfuly", "Success");
+    // }
   };
 
   return (
@@ -86,30 +121,69 @@ const QuestionAdd = () => {
             justifyContent: "space-between",
           }}
         >
-          <TextField
-            id="filled-basic"
-            label="Question Id"
-            variant="outlined"
-            onChange={(e) => {
-              setQuestion_id(e.target.value);
-            }}
-          />
-          <TextField
-            id="filled-basic"
-            label="Tags"
-            variant="outlined"
-            onChange={(e) => {
-              setTags(e.target.value);
-            }}
-          />
-          <TextField
-            id="filled-basic"
-            label="Difficulty Level"
-            variant="outlined"
-            onChange={(e) => {
-              setDifficulty_level(e.target.value);
-            }}
-          />
+          <Grid item xs={6} sm={3}>
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Question Name"
+              variant="outlined"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Question Id"
+              variant="outlined"
+              onChange={(e) => {
+                setQuestion_id(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Author"
+              variant="outlined"
+              onChange={(e) => {
+                setAuthor(e.target.value);
+              }}
+            />
+          </Grid>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <Grid item xs={10} sm={5}>
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Tags"
+              variant="outlined"
+              onChange={(e) => {
+                setTags(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={10} sm={5}>
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Difficulty Level"
+              variant="outlined"
+              onChange={(e) => {
+                setDifficulty_level(e.target.value);
+              }}
+            />
+          </Grid>
         </div>
         <div style={{ width: "100%" }}>
           <TextField
@@ -127,10 +201,62 @@ const QuestionAdd = () => {
         <div style={{ width: "100%", display: "flex" }}>
           <TextField
             id="filled-basic"
+            label="Input Details"
+            variant="outlined"
+            multiline
+            minRows={5}
+            fullWidth
+            style={{ margin: "0 20px 0 0" }}
+            onChange={(e) => {
+              setInputDetails(e.target.value);
+            }}
+          />
+          <TextField
+            id="filled-basic"
+            label="Output Details"
+            variant="outlined"
+            multiline
+            minRows={5}
+            fullWidth
+            style={{ margin: "0 0 0 20px" }}
+            onChange={(e) => {
+              setOutputDetails(e.target.value);
+            }}
+          />
+        </div>
+        <div style={{ width: "100%", display: "flex" }}>
+          <TextField
+            id="filled-basic"
+            label="Sample Input"
+            variant="outlined"
+            multiline
+            minRows={5}
+            fullWidth
+            style={{ margin: "0 20px 0 0" }}
+            onChange={(e) => {
+              setSampleInput(e.target.value);
+            }}
+          />
+          <TextField
+            id="filled-basic"
+            label="Sample Output"
+            variant="outlined"
+            multiline
+            minRows={5}
+            fullWidth
+            style={{ margin: "0 0 0 20px" }}
+            onChange={(e) => {
+              setSampleOutput(e.target.value);
+            }}
+          />
+        </div>
+        <div style={{ width: "100%", display: "flex" }}>
+          <TextField
+            id="filled-basic"
             label="Input"
             variant="outlined"
             multiline
-            minRows={10}
+            minRows={5}
             fullWidth
             style={{ margin: "0 20px 0 0" }}
             onChange={(e) => {
@@ -142,7 +268,7 @@ const QuestionAdd = () => {
             label="Output"
             variant="outlined"
             multiline
-            minRows={10}
+            minRows={5}
             fullWidth
             style={{ margin: "0 0 0 20px" }}
             onChange={(e) => {

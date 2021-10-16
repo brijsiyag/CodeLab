@@ -17,7 +17,7 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(auth);
+// app.use(auth);
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -37,21 +37,20 @@ app.post("/login", (req, res) => {
   const userName = req.body.data.userName,
     password = req.body.data.password;
   connection.query(
-    "SELECT * FROM user WHERE user_name = ? AND password = ?",
+    "SELECT * FROM user WHERE username = ? AND password = ?",
     [userName, password],
     (err, result) => {
       if (result.length > 0) {
         res
-          .status(200)
           .cookie("Auth", true, {
             httpOnly: true,
             sameSite: "lax",
-            expires: new Date(new Date().getTime() + 100 * 1000),
+            expires: new Date(new Date().getTime() + 15 * 31536000000),
           })
-          .cookie("user_name", userName, {
+          .cookie("username", userName, {
             httpOnly: true,
             sameSite: "lax",
-            expires: new Date(new Date().getTime() + 100 * 1000),
+            expires: new Date(new Date().getTime() + 15 * 31536000000),
           })
           .send(true);
       } else {
@@ -61,32 +60,95 @@ app.post("/login", (req, res) => {
   );
 });
 
+app.post("/signup", (req, res) => {
+  console.log(req.body.data);
+  connection.query(
+    "SELECT * FROM user WHERE username=? OR email=?",
+    [req.body.data.username, req.body.data.email],
+    (err, result) => {
+      if (err) {
+        res.send({
+          success: false,
+          msg: "Can't Create Account,Please Try Again!!",
+        });
+      } else {
+        if (result.length > 0) {
+          res.send({ success: false, msg: "Duplicate Username or Email" });
+        } else {
+          connection.query(
+            "INSERT INTO `user`(`name`, `username`, `gender`,`country`,`state`,`city`,`profession`,`institute`,`email`,`password`,`rating`) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            [
+              req.body.data.name,
+              req.body.data.username,
+              req.body.data.gender,
+              req.body.data.country,
+              req.body.data.state,
+              req.body.data.city,
+              req.body.data.profession,
+              req.body.data.institute,
+              req.body.data.email,
+              req.body.data.password,
+              0,
+            ],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+                res.send({
+                  success: false,
+                  msg: "Can't Create Account,Please Try Again!!",
+                });
+              } else {
+                res
+                  .cookie("Auth", true, {
+                    httpOnly: true,
+                    sameSite: "lax",
+                    expires: new Date(new Date().getTime() + 15 * 31536000000),
+                  })
+                  .cookie("username", req.body.data.username, {
+                    httpOnly: true,
+                    sameSite: "lax",
+                    expires: new Date(new Date().getTime() + 15 * 31536000000),
+                  })
+                  .send({ success: true });
+              }
+            }
+          );
+        }
+      }
+    }
+  );
+});
+
 app.get("/logout", (req, res) => {
   res.clearCookie("Auth");
-  res.clearCookie("user_name");
-  res.sendStatus(200);
+  res.clearCookie("username");
+  res.sendStatus(200).send(true);
 });
 
 app.get("/leaderboard", (req, res) => {
-  connection.query("SELECT user_name,rating FROM user", (err, result) => {
+  connection.query("SELECT username,rating FROM user", (err, result) => {
     if (err) {
       res.send(err);
+    } else {
+      if (result.length > 10) {
+        result.length = 10;
+      }
+      res.json(
+        result.sort((a, b) => {
+          return b.rating - a.rating;
+        })
+      );
     }
-    if (result.length > 10) {
-      result.length = 10;
-    }
-    res.json(
-      result.sort((a, b) => {
-        return b.rating - a.rating;
-      })
-    );
   });
 });
 
 app.get("/questions", (req, res) => {
-  connection.query("SELECT * FROM question", (err, result) => {
-    res.json(result);
-  });
+  connection.query(
+    "SELECT `question_id`, `name`, `question`, `tags`, `difficulty_level`, `sample_input`, `sample_output`, `input_detail`, `output_detail`, `submissions` FROM `question`",
+    (err, result) => {
+      res.json(result);
+    }
+  );
 });
 
 app.get("/question/:id", (req, res) => {
@@ -101,7 +163,7 @@ app.get("/question/:id", (req, res) => {
 
 app.get("/submissions", (req, res) => {
   connection.query(
-    "SELECT * FROM question_details WHERE user_name = ?",
+    "SELECT * FROM question_details WHERE username = ?",
     ["brijsiyag"],
     (err, result) => {
       console.log(result.length);
@@ -111,9 +173,55 @@ app.get("/submissions", (req, res) => {
   );
 });
 
-app.post("/addquestion", (req, res) => {
+app.get("/userinfo/:username", (req, res) => {
+  const username = req.params.username;
   connection.query(
-    `INSERT INTO question VALUES('${req.body.question_id}', '${req.body.question}', '${req.body.output}', '${req.body.tags}', '${req.body.difficulty_level}', '${req.body.input}')`,
+    "SELECT * FROM user WHERE username = ?",
+    [username],
+    (err, result_user) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(400);
+      } else if (result_user.length == 0) {
+        res.sendStatus(400);
+      } else {
+        connection.query(
+          "SELECT * FROM question_details WHERE username = ?",
+          [username],
+          (err, result_question_details) => {
+            result_user[0].password = "";
+            result_user[0].email = "";
+            res.send({
+              user: result_user[0],
+              question_details: result_question_details,
+            });
+          }
+        );
+      }
+    }
+  );
+});
+
+app.post("/addquestion", (req, res) => {
+  console.log(req.body);
+  connection.query(
+    "INSERT INTO `question`(`question_id`, `name`, `question`, `output`, `tags`, `difficulty_level`, `input`, `sample_input`, `sample_output`, `input_detail`, `output_detail`, `submissions`, `author`, `date`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    [
+      req.body.question_id,
+      req.body.name,
+      req.body.question,
+      req.body.output,
+      req.body.tags,
+      req.body.difficulty_level,
+      req.body.input,
+      req.body.sampleInput,
+      req.body.sampleOutput,
+      req.body.inputDetails,
+      req.body.outputDetails,
+      0,
+      req.body.author,
+      new Date(),
+    ],
     (err, result) => {
       if (err) {
         res.send({ ...err, error: true });
@@ -159,36 +267,158 @@ app.post("/run", (req, res) => {
   );
 });
 
-app.post("/submit", (req, res) => {
+app.post("/submit/:question_id", (req, res) => {
   console.log(req.cookies);
-  const program = {
-    script: req.body.code,
-    language: req.body.lang,
-    stdin: req.body.input,
-    versionIndex: "0",
-    clientId: process.env.JDoodle_Client_Id,
-    clientSecret: process.env.JDoodle_Client_Secret,
-  };
-  request(
-    {
-      url: "https://api.jdoodle.com/v1/execute",
-      method: "POST",
-      json: program,
-    },
-    function (error, response, body) {
-      let data = { ...body };
-      if (error) {
-        console.log(error);
+  connection.query(
+    "SELECT * FROM question WHERE question_id = ?",
+    [req.params.question_id],
+    (err, result_question) => {
+      console.log(result_question);
+      if (err || result_question.length === 0) {
+        console.log(err);
+        res.send({ success: false });
       } else {
-        data.date = response.headers.date;
         connection.query(
-          "SELECT * FROM questions WHERE question_id = ?",
-          [req.body.question_id],
-          (err, result) => {
-            console.log(result);
+          "SELECT * FROM user WHERE username = ?",
+          [req.cookies.username],
+          (err, user_result) => {
+            if (user_result.length === 0) {
+              res.send({ success: false });
+            } else {
+              const program = {
+                script: req.body.code,
+                language: req.body.lang,
+                stdin: result_question[0].input,
+                versionIndex: "0",
+                clientId: process.env.JDoodle_Client_Id,
+                clientSecret: process.env.JDoodle_Client_Secret,
+              };
+              request(
+                {
+                  url: "https://api.jdoodle.com/v1/execute",
+                  method: "POST",
+                  json: program,
+                },
+                function (error, response, body) {
+                  let data = { ...body };
+                  console.log(data);
+                  if (error) {
+                    console.log(error);
+                    res.send({ success: false });
+                  } else {
+                    data.date = response.headers.date;
+                    connection.query(
+                      "UPDATE question SET submissions = submissions + 1 WHERE question_id = ?",
+                      [req.params.question_id],
+                      (err, result) => {
+                        if (err) {
+                          console.log(err);
+                          res.send({ success: false });
+                        } else {
+                          connection.query(
+                            "INSERT INTO `question_details`(`question_id`, `username`, `status`, `code`, `time`, `space`, `submission_date`,`lang`) VALUES (?,?,?,?,?,?,?,?)",
+                            [
+                              req.params.question_id,
+                              req.cookies.username,
+                              JSON.stringify(
+                                result_question[0].output.replace(
+                                  /(\r\n|\n|\r)/g,
+                                  ""
+                                )
+                              ) ===
+                              JSON.stringify(
+                                data.output.replace(/(\r\n|\n|\r)/g, "")
+                              )
+                                ? "AC"
+                                : "WA",
+                              req.body.code,
+                              data.cpuTime,
+                              data.memory,
+                              new Date(),
+                              req.body.lang,
+                            ],
+                            (err, result) => {
+                              if (err) {
+                                console.log(err);
+                                res.send({ success: false });
+                              } else {
+                                if (
+                                  JSON.stringify(
+                                    result_question[0].output.replace(
+                                      /(\r\n|\n|\r)/g,
+                                      ""
+                                    )
+                                  ) ===
+                                  JSON.stringify(
+                                    data.output.replace(/(\r\n|\n|\r)/g, "")
+                                  )
+                                ) {
+                                  data.status = "AC";
+                                } else {
+                                  data.status = "WA";
+                                }
+                                let rating_changed = 0;
+                                connection.query(
+                                  "SELECT * FROM question_details WHERE question_id = ? AND status = 'AC'",
+                                  [req.params.question_id],
+                                  (err, result) => {
+                                    if (err) {
+                                      console.log(err);
+                                      res.send({ success: false });
+                                    }
+                                    if (result.length === 0) {
+                                      switch (
+                                        result_question[0].difficulty_level
+                                      ) {
+                                        case "Hard":
+                                          data.status === "AC"
+                                            ? (rating_changed = 50)
+                                            : (rating_changed = -30);
+                                          break;
+
+                                        case "Medium":
+                                          data.status === "AC"
+                                            ? (rating_changed = 30)
+                                            : (rating_changed = -20);
+                                          break;
+
+                                        case "Easy":
+                                          data.status === "AC"
+                                            ? (rating_changed = 20)
+                                            : (rating_changed = -10);
+                                          break;
+                                        default:
+                                          break;
+                                      }
+                                    }
+                                  }
+                                );
+                                console.log(rating_changed);
+                                connection.query(
+                                  "UPDATE user SET rating = rating + ? WHERE username = ?",
+                                  [rating_changed, req.cookies.username],
+                                  (err, result) => {
+                                    if (err) {
+                                      console.log(err);
+                                      res.send({ success: false });
+                                    } else {
+                                      console.log(result);
+                                      res.send(data);
+                                    }
+                                  }
+                                );
+                              }
+                            }
+                          );
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
           }
         );
-        res.send(data);
       }
     }
   );

@@ -1,0 +1,102 @@
+.profile-container {
+  width: min(90vw, 900px);
+  min-height: 100vh;
+  margin: auto;
+  border: 1px rgb(196, 196, 196) solid;
+  margin-top: 10vh;
+  border-radius: 10px;
+  display: flex;
+}
+
+.profile-main-left {
+  /* flex-grow: 1.7; */
+  flex-basis: 70%;
+  border-right: 1px solid rgb(185, 185, 185);
+  padding: 15px;
+}
+
+.profile-user-info ul {
+  list-style: none;
+  width: 100%;
+  padding: 0;
+}
+
+.profile-user-info li {
+  width: 100%;
+  padding: 15px 0;
+  border-bottom: 1px solid gray;
+  border-width: 100%;
+}
+
+.profile-user-info ul li label {
+  min-width: 200px;
+  display: inline-block;
+  font-weight: bolder;
+}
+.profile-pic-name-container {
+  display: flex;
+  border-bottom: 1px solid rgb(185, 185, 185);
+  padding: 15px;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.profile-name {
+  padding-left: 15px;
+}
+
+.profile-main-right {
+  /* flex-grow: 1; */
+  flex-basis: 30%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profile-main-right-upper {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center;
+}
+.profile-global-rank-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-main-right-lower {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px rgb(168, 168, 168) solid;
+}
+.profile-recent-activity-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px rgb(207, 207, 207) solid;
+  border-radius: 5px;
+  max-height: 50vh;
+  overflow: auto;
+  position: relative;
+}
+
+.profile-recent-activity-container table {
+  font-size: 0.9rem;
+}
+.profile-recent-activity-container tbody {
+}
+
+.profile-recent-activity-container thead {
+  font-weight: bolder;
+}
+.profile-recent-activity-container td {
+  padding: 15px 3px;
+}
+.profile-recent-activity-container tr {
+  box-shadow: rgb(65, 65, 65) 0px 2px;
+}
+
+.profile-recent-activity-container tbody tr:last-child {
+  box-shadow: rgb(65, 65, 65) 0px 0px;
+}

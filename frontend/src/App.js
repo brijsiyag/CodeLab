@@ -19,6 +19,7 @@ import Axios from "axios";
 import Question from "./Question/Question";
 import SignUp from "./SignUp/SignUp";
 import CookieConsent from "./Cookie_Consent";
+import Profile from "./Profile/Profile";
 Axios.defaults.withCredentials = true;
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/question" component={Questions}></Route>
+          <Route exact path="/users/:username" component={Profile}></Route>
           <Route
             exact
             path="/question/:question_id"
