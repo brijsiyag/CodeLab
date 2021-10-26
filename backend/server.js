@@ -24,6 +24,7 @@ const Users = require("./Routes/Users");
 const DeleteUser = require("./Routes/DeleteUser");
 const DeleteQuestion = require("./Routes/DeleteQuestion");
 const EditUser = require("./Routes/EditUser");
+const EditQuestion = require("./Routes/EditQuestion");
 //MiddleWares
 app.use(
   cors({
@@ -55,6 +56,7 @@ app.get("/users", Users);
 app.delete("/user/:username", DeleteUser);
 app.delete("/question/:question_id", DeleteQuestion);
 app.post("/edituser", EditUser);
+app.post("/editquestion", EditQuestion);
 app.listen(PORT, () => {
   console.log(`Server is running on Port ${PORT}....`);
 });

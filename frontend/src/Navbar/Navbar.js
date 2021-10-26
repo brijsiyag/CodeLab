@@ -11,6 +11,7 @@ import ContactMailIcon from "@mui/icons-material/ContactMail";
 import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import CodeIcon from "@mui/icons-material/Code";
 import AboutUs from "./AboutUs";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import logo from "./codelab.svg";
@@ -93,11 +94,17 @@ export default function ButtonAppBar({
           backgroundColor: "rgba(255, 255, 255, 0.7)",
           backgroundBlendMode: "darken",
           backdropFilter: "blur(6px)",
+          webkitBackdropFilter: "blur(6px)",
         }}
       >
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link to={{ pathname: "/" }}>
+            <Link
+              to={{ pathname: "/" }}
+              style={{
+                textDecoration: "none",
+              }}
+            >
               <img
                 src={logo}
                 width="150px"
@@ -107,14 +114,26 @@ export default function ButtonAppBar({
             </Link>
           </Typography>
           <Tooltip TransitionComponent={Zoom} title={"Practice"}>
-            <Button size="small" color="primary" variant="contained">
-              <Link
-                to={{ pathname: "/question" }}
-                style={{ color: "white", textDecoration: "none" }}
-              >
+            <Link
+              to={{ pathname: "/question" }}
+              style={{ color: "white", textDecoration: "none" }}
+            >
+              <Button size="small" color="primary" variant="contained">
                 Practice
-              </Link>
-            </Button>
+              </Button>
+            </Link>
+          </Tooltip>
+          <Tooltip TransitionComponent={Zoom} title={"IDE"}>
+            <Link to={{ pathname: "/ide" }}>
+              <Button
+                size="small"
+                color="primary"
+                className={classes.menuButton}
+                variant="outlined"
+              >
+                <CodeIcon />
+              </Button>
+            </Link>
           </Tooltip>
           <Tooltip TransitionComponent={Zoom} title={"About Us"}>
             <Button

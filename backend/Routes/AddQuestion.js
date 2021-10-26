@@ -26,8 +26,15 @@ router.post("/addquestion", (req, res) => {
         console.log(err);
         return res.send({ ...err, success: false });
       } else {
+        let tag = "";
+        JSON.parse(req.body.tags).map((element) => {
+          tag += element + ", ";
+        });
         UpdateActivities(
-          `New Problem ${req.body.name} added with tag ${req.body.tags}`
+          `New Problem ${req.body.name} added with tags ${tag.slice(
+            0,
+            tag.length - 2
+          )}.`
         );
         return res.send({ ...result, success: true });
       }

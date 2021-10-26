@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function BasicTable() {
   const [isQuestionEditOpen, setIsQuestionEditOpen] = useState(false);
-  const [rows, setRows] = useState([]);
+  let [rows, setRows] = useState([]);
   const [questionData, setQuestionData] = useState({});
   const classes = useStyles();
   useEffect(() => {
@@ -175,7 +175,12 @@ export default function BasicTable() {
                     variant="outlined"
                     color="primary"
                     onClick={() => {
-                      setQuestionData(rows[index]);
+                      let tags = [];
+                      rows[index].tags.map((element, index) => {
+                        tags.push({ tag: element });
+                      });
+                      console.log(tags);
+                      setQuestionData({ ...rows[index], tags: tags });
                       setIsQuestionEditOpen(!isQuestionEditOpen);
                     }}
                   >

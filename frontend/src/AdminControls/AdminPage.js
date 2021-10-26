@@ -10,14 +10,14 @@ Axios.defaults.withCredentials = true;
 const AdminPage = () => {
   return (
     <div className="admin-page-main-container">
-      <Button variant="outlined" color="primary">
-        <Link
-          style={{ textDecoration: "none" }}
-          to={{ pathname: "/add-question" }}
-        >
+      <Link
+        style={{ textDecoration: "none" }}
+        to={{ pathname: "/add-question" }}
+      >
+        <Button variant="outlined" color="primary">
           Add Question
-        </Link>
-      </Button>
+        </Button>
+      </Link>
       <div>
         <Typography variant="h4" align="center" component="h2" margin="20px">
           Users

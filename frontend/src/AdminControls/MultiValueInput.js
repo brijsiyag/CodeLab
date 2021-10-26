@@ -3,7 +3,14 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
-export default function Tags({ setTags, tags }) {
+export default function Tags({ setTags, tag }) {
+  useEffect(() => {
+    let arr = [];
+    tag.map((element) => {
+      arr.push(element.tag);
+    });
+    setTags(arr);
+  }, []);
   const setTagsHandler = (values) => {
     let arr = [];
     values.map((element) => {
@@ -20,7 +27,7 @@ export default function Tags({ setTags, tags }) {
         options={tags}
         getOptionLabel={(option) => option.tag}
         filterSelectedOptions
-        defaultValue={[...tags]}
+        defaultValue={[...tag]}
         onChange={(event, values) => {
           setTagsHandler(values);
         }}

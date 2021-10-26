@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function BasicTable() {
-  const [rows, setRows] = useState([]);
+  let [rows, setRows] = useState([]);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [modalData, setModalData] = useState({});
   const classes = useStyles();

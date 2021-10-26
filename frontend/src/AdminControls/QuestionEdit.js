@@ -25,21 +25,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QuestionAdd = ({ questionData }) => {
+const QuestionAdd = ({ questionData, setIsQuestionEditOpen }) => {
   console.log(questionData);
   document.title = "Add Question CodeLab";
   const classes = useStyles();
-  const [question_id, setQuestion_id] = useState("");
-  const [name, setName] = useState("");
-  const [question, setQuestion] = useState("");
-  const [outputDetails, setOutputDetails] = useState("");
-  const [inputDetails, setInputDetails] = useState("");
-  const [sampleOutput, setSampleOutput] = useState("");
-  const [sampleInput, setSampleInput] = useState("");
+  const [question_id, setQuestion_id] = useState(questionData.question_id);
+  const [name, setName] = useState(questionData.name);
+  const [question, setQuestion] = useState(questionData.question);
+  const [outputDetails, setOutputDetails] = useState(
+    questionData.output_detail
+  );
+  const [inputDetails, setInputDetails] = useState(questionData.input_detail);
+  const [sampleOutput, setSampleOutput] = useState(questionData.sample_output);
+  const [sampleInput, setSampleInput] = useState(questionData.sample_output);
   const [output, setOutput] = useState("");
   const [input, setInput] = useState("");
   const [tags, setTags] = useState(questionData.tags);
-  const [author, setAuthor] = useState("");
+  const [author, setAuthor] = useState(questionData.author);
   const [difficulty_level, setDifficulty_level] = useState(
     questionData.difficulty_level
   );
@@ -64,8 +66,7 @@ const QuestionAdd = ({ questionData }) => {
   };
 
   const submitHandler = async () => {
-    document.title = "Edit Question CodeLab";
-    Axios.post(`${process.env.REACT_APP_SERVER_ADDRESS}/addQuestion`, {
+    Axios.post(`${process.env.REACT_APP_SERVER_ADDRESS}/editquestion`, {
       question: question,
       question_id: question_id,
       sampleInput: sampleInput,
@@ -78,10 +79,13 @@ const QuestionAdd = ({ questionData }) => {
       tags: JSON.stringify(tags),
       difficulty_level: difficulty_level,
       name: name,
+      original_question_id: questionData.question_id,
     }).then((res) => {
       if (res.data.success === false) {
         createNotification("error", res.data.sqlMessage, "Error");
       } else {
+        setIsQuestionEditOpen(false);
+        alert("Question Updated Successfuly...");
         createNotification("success", "Question Added Successfuly", "Success");
       }
     });
@@ -108,7 +112,7 @@ const QuestionAdd = ({ questionData }) => {
               fullWidth
               id="filled-basic"
               label="Question Name"
-              defaultValue={questionData.name}
+              value={name}
               variant="outlined"
               onChange={(e) => {
                 setName(e.target.value);
@@ -118,7 +122,7 @@ const QuestionAdd = ({ questionData }) => {
           <Grid item xs={6} sm={3}>
             <TextField
               fullWidth
-              defaultValue={questionData.question_id}
+              value={question_id}
               id="filled-basic"
               label="Question Id"
               variant="outlined"
@@ -129,7 +133,7 @@ const QuestionAdd = ({ questionData }) => {
           </Grid>
           <Grid item xs={6} sm={3}>
             <TextField
-              defaultValue={questionData.author}
+              value={author}
               fullWidth
               id="filled-basic"
               label="Author"
@@ -148,7 +152,7 @@ const QuestionAdd = ({ questionData }) => {
           }}
         >
           <Grid item xs={10} sm={5}>
-            <MultiValueInput setTags={setTags} tags={tags} />
+            <MultiValueInput setTags={setTags} tag={questionData.tags} />
           </Grid>
           <Grid item xs={10} sm={5}>
             <Select
@@ -177,7 +181,7 @@ const QuestionAdd = ({ questionData }) => {
             label="Question"
             variant="outlined"
             id="question"
-            defaultValue={questionData.question}
+            value={question}
             minRows={15}
             fullWidth={true}
             multiline={true}
@@ -191,7 +195,7 @@ const QuestionAdd = ({ questionData }) => {
             id="filled-basic"
             label="Input Details"
             variant="outlined"
-            defaultValue={questionData.input_detail}
+            value={inputDetails}
             multiline
             minRows={5}
             fullWidth
@@ -203,7 +207,7 @@ const QuestionAdd = ({ questionData }) => {
           <TextField
             id="filled-basic"
             label="Output Details"
-            defaultValue={questionData.output_detail}
+            value={outputDetails}
             variant="outlined"
             multiline
             minRows={5}
@@ -219,7 +223,7 @@ const QuestionAdd = ({ questionData }) => {
             id="filled-basic"
             label="Sample Input"
             variant="outlined"
-            defaultValue={questionData.sample_input}
+            value={sampleInput}
             multiline
             minRows={5}
             fullWidth
@@ -232,7 +236,7 @@ const QuestionAdd = ({ questionData }) => {
             id="filled-basic"
             label="Sample Output"
             variant="outlined"
-            defaultValue={questionData.sample_output}
+            value={sampleOutput}
             multiline
             minRows={5}
             fullWidth

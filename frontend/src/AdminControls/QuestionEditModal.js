@@ -41,7 +41,10 @@ export default function TransitionsModal({
       >
         <Fade in={isQuestionEditOpen}>
           <Box sx={style}>
-            <QuestionEdit questionData={questionData} />
+            <QuestionEdit
+              questionData={questionData}
+              setIsQuestionEditOpen={setIsQuestionEditOpen}
+            />
           </Box>
         </Fade>
       </Modal>

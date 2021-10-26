@@ -19,7 +19,9 @@ router.get("/userinfo/:username", (req, res) => {
           [username],
           (err, result_question_details) => {
             result_user[0].password = "";
-            result_user[0].email = "";
+            if (username !== req.cookies.username) {
+              result_user[0].email = "";
+            }
             return res.send({
               user: result_user[0],
               question_details: result_question_details,

@@ -10,7 +10,7 @@ router.post("/edituser", async (req, res) => {
     req.cookies.username === req.body.data.username
   ) {
     connection.query(
-      "UPDATE `user` SET `name`=?,`gender`=?,`country`=?,`state`=?,`city`=?,`institute`=?,`profession`=?,`email`=?,`admin`=? WHERE username = ?",
+      "UPDATE `user` SET `name`=?,`gender`=?,`country`=?,`state`=?,`city`=?,`institute`=?,`profession`=?,`email`=? WHERE username = ?",
       [
         req.body.data.name,
         req.body.data.gender,
@@ -20,7 +20,6 @@ router.post("/edituser", async (req, res) => {
         req.body.data.institute,
         req.body.data.profession,
         req.body.data.email,
-        0,
         req.body.data.username,
       ],
       (err, result) => {

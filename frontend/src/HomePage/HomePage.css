@@ -1,4 +1,5 @@
 .home-page-top-page {
+  font-family: "Roboto", sans-serif;
   display: flex;
 }
 
@@ -24,5 +25,6 @@
 }
 
 .home-page-middle-container {
+  font-family: "Roboto", sans-serif;
   display: flex;
 }
