@@ -170,4 +170,9 @@
   left: 50%;
   transform: translate(0, -100%);
 }
-/* rgb(223, 223, 223) */
+
+@media (max-width: 1400px) {
+  .canvas-main-container {
+    display: none;
+  }
+}

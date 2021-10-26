@@ -62,6 +62,7 @@ import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/theme-xcode";
 
 const Ide = () => {
+  document.title = "IDE CodeLab";
   const { question_id } = useParams();
   const [code, setCode] = useState("");
   const [lang, setLang] = useState("cpp17");
@@ -89,6 +90,8 @@ const Ide = () => {
         break;
       case "error":
         NotificationManager.error(message, title, 5000);
+        break;
+      default:
         break;
     }
   };
@@ -124,7 +127,6 @@ const Ide = () => {
       setOutput("");
       setRunInfoShow(false);
       const res = await GetOutput(code, lang, input, question_id, "submit");
-      console.log(res);
       if (res.success === false) {
         alert("Please try again!!");
       } else {

@@ -9,13 +9,14 @@ const Canvas = () => {
           .querySelector(".canvas-pencil-bar")
           .classList.toggle("display-none");
       });
+
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
     canvas.width = (7 * window.innerWidth) / 10;
     canvas.height = (7 * window.innerHeight) / 10;
     window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      ctx.canvas.width = (7 * window.innerWidth) / 10;
+      ctx.canvas.height = (7 * window.innerHeight) / 10;
     });
     let pencilColor = "black",
       pencilSize = 3,
@@ -231,7 +232,7 @@ const Canvas = () => {
       .classList.toggle("display-none");
   };
   return (
-    <div>
+    <div className="canvas-main-container">
       <div className="canvas-controls-container">
         <button id="clear-canvas">Clear</button>
         <div>

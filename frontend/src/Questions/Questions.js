@@ -25,12 +25,13 @@ const columns = [
 export default function DataTable() {
   const [rows, setRows] = React.useState([]);
   React.useEffect(() => {
-    Axios.get("http://localhost:5000/questions")
+    Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/questions`)
       .then((res) => {
         res.data.forEach((element) => {
           element.id = element.question_id;
+          // element.tags = JSON.parse(element.tags);
         });
-        console.log(res.data);
+        document.title = "Practice CodeLab";
         setRows(res.data);
       })
       .catch((err) => {

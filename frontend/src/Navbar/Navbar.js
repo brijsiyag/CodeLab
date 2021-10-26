@@ -1,52 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import green from "@material-ui/core/colors/green";
-import { BrowserRouter as Link, useHistory } from "react-router-dom";
-import Button from "@mui/material/Button";
+import { useHistory, Link } from "react-router-dom";
 import Axios from "axios";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import InfoIcon from "@mui/icons-material/Info";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AboutUs from "./AboutUs";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import logo from "./codelab.svg";
+import Tooltip from "@mui/material/Tooltip";
+import Zoom from "@mui/material/Zoom";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 Axios.defaults.withCredentials = true;
-
 const useStyles = makeStyles((theme) => ({
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginLeft: "20px !important",
+    maxWidth: "fit-content !important",
+    maxHeight: "fit-content !important",
+    minWidth: "fit-content !important",
+    minHeight: "fit-content !important",
   },
   title: {
     flexGrow: 1,
   },
-  customColor: {
-    // or hex code, this is normal CSS background-color
-    backgroundColor: green[500],
-  },
-  customHeight: {
-    minHeight: 200,
-  },
   offset: theme.mixins.toolbar,
 }));
 
-export default function ButtonAppBar() {
-  let History = useHistory();
+export default function ButtonAppBar({
+  loggedIn,
+  setLoggedIn,
+  isAdmin,
+  setIsAdmin,
+}) {
   const classes = useStyles();
-  const example = "default";
-  const isCustomColor = example === "customColor";
-  const isCustomHeight = example === "customHeight";
-  const [loggedIn, setloggedIn] = React.useState(
-    sessionStorage.getItem("LoggedIn") === "true" ? true : false
-  );
-
+  const [aboutUs, setAboutUs] = useState(false);
+  const History = useHistory();
   const loginClickHandler = () => {
     if (sessionStorage.getItem("LoggedIn") === "true") {
-      Axios.get("http://localhost:5000/logout")
+      Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/logout`)
         .then((res) => {
-          console.log(res.data);
-          if (res.data) {
-            document.querySelector("#navbar-log-in-out-btn").innerText =
-              "LogIn";
+          if (res.data.success) {
             sessionStorage.removeItem("LoggedIn");
+            sessionStorage.removeItem("isAdmin");
+            setLoggedIn(false);
+            setIsAdmin(false);
             alert("Successfuly Logged Out!!");
           } else {
             alert("Ooops! Something Went Wrong!!!");
@@ -59,16 +62,41 @@ export default function ButtonAppBar() {
       History.push("/login");
     }
   };
+  const profileClickHandler = () => {
+    Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/username`).then(
+      (res) => {
+        if (res.data.success === false) {
+          alert(
+            "There is some server side Error ! Please try after some time!!"
+          );
+        } else {
+          History.push(`/users/${res.data}`);
+        }
+      }
+    );
+  };
+
+  const contactUsClickHandler = () => {
+    let confirm = window.confirm("Continue to mail app?");
+    if (confirm) {
+      let link = document.createElement("a");
+      link.href = "mailto:brijsiyag@gmail.com?subject = CodeLab";
+      link.click();
+    }
+  };
+
   return (
-    <React.Fragment>
+    <Box sx={{ flexGrow: 1, marginBottom: "15vh" }}>
       <AppBar
-        color={isCustomColor || isCustomHeight ? "primary" : example}
-        className={`${isCustomColor && classes.customColor} ${
-          isCustomHeight && classes.customHeight
-        }`}
+        position="fixed"
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          backgroundBlendMode: "darken",
+          backdropFilter: "blur(6px)",
+        }}
       >
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to={{ pathname: "/" }}>
               <img
                 src={logo}
@@ -78,26 +106,89 @@ export default function ButtonAppBar() {
               ></img>
             </Link>
           </Typography>
-          <IconButton
-            color="inherit"
-            onClick={() => {
-              History.push("/question");
-            }}
+          <Tooltip TransitionComponent={Zoom} title={"Practice"}>
+            <Button size="small" color="primary" variant="contained">
+              <Link
+                to={{ pathname: "/question" }}
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Practice
+              </Link>
+            </Button>
+          </Tooltip>
+          <Tooltip TransitionComponent={Zoom} title={"About Us"}>
+            <Button
+              size="small"
+              color="primary"
+              className={classes.menuButton}
+              variant="outlined"
+              onClick={() => {
+                setAboutUs(!aboutUs);
+              }}
+            >
+              <InfoIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip TransitionComponent={Zoom} title={"Contact Us"}>
+            <Button
+              size="small"
+              className={classes.menuButton}
+              variant="outlined"
+              onClick={() => {
+                contactUsClickHandler();
+              }}
+            >
+              <ContactMailIcon />
+            </Button>
+          </Tooltip>
+
+          {loggedIn && (
+            <Tooltip TransitionComponent={Zoom} title={"Profile"}>
+              <Button
+                color="primary"
+                className={classes.menuButton}
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  profileClickHandler();
+                }}
+              >
+                <AccountBoxIcon />
+              </Button>
+            </Tooltip>
+          )}
+          {isAdmin && (
+            <Tooltip TransitionComponent={Zoom} title={"Admin"}>
+              <Button
+                color="primary"
+                className={classes.menuButton}
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  History.push("/admin");
+                }}
+              >
+                <AdminPanelSettingsIcon />
+              </Button>
+            </Tooltip>
+          )}
+          <Tooltip
+            TransitionComponent={Zoom}
+            title={loggedIn ? "Logout" : "Login"}
           >
-            Practice
-          </IconButton>
-          <IconButton color="inherit">About Us</IconButton>
-          <IconButton color="inherit">Contact Us</IconButton>
-          <Button
-            variant="contained"
-            onClick={loginClickHandler}
-            id="navbar-log-in-out-btn"
-          >
-            {loggedIn ? "Log Out" : "LogIn"}
-          </Button>
+            <Button
+              color="primary"
+              className={classes.menuButton}
+              variant="contained"
+              size="small"
+              onClick={loginClickHandler}
+            >
+              {loggedIn ? <LogoutIcon /> : <LoginIcon />}
+            </Button>
+          </Tooltip>
         </Toolbar>
       </AppBar>
-      <Toolbar />
-    </React.Fragment>
+      <AboutUs aboutUs={aboutUs} setAboutUs={setAboutUs} />
+    </Box>
   );
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import Chart from "react-google-charts";
-import Axios from "axios";
 
 const pieOptions = {
   title: "Submissions",

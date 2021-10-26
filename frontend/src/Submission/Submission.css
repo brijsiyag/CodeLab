@@ -1,0 +1,28 @@
+.submission-page {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: min(900px, 70vw);
+  margin: 5vh auto;
+  min-height: 70vh;
+  border: 1px rgb(196, 196, 196) solid;
+  border-radius: 1px;
+  box-shadow: rgb(179, 179, 179) 0 0 10px 0.5px;
+}
+
+.submission-header {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-height: fit-content;
+  font-size: 1rem;
+  border-bottom: 1px solid gray;
+  padding: 10px;
+}
+.submission-body {
+}
+.submission-solution-tag {
+  font-weight: bolder;
+  font-size: 2rem;
+  color: gray;
+}

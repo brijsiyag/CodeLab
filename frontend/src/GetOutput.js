@@ -3,8 +3,7 @@ import Axios from "axios";
 Axios.defaults.withCredentials = true;
 
 const getOutput = async (code, lang, input, question_id, btn_clicked) => {
-  console.log(question_id);
-  let url = "http://localhost:5000/";
+  let url = `${process.env.REACT_APP_SERVER_ADDRESS}/`;
   // url = url + (question_id === undefined) ? "run" : `submit/ + question_id`;
   if (
     (question_id === undefined && btn_clicked === "run") ||
@@ -14,7 +13,6 @@ const getOutput = async (code, lang, input, question_id, btn_clicked) => {
   } else {
     url += `submit/${question_id}`;
   }
-  console.log(url);
   try {
     const res = await Axios({
       url: url,
@@ -27,7 +25,6 @@ const getOutput = async (code, lang, input, question_id, btn_clicked) => {
       },
       withCredentials: true,
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     console.log(error);

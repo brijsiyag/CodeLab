@@ -4,9 +4,11 @@ import "./Leaderboard.css";
 const LeaderBoard = () => {
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    Axios.get("http://localhost:5000/leaderboard").then((response) => {
-      setData(response.data);
-    });
+    Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/leaderboard`).then(
+      (response) => {
+        setData(response.data);
+      }
+    );
   }, []);
   return (
     <div>

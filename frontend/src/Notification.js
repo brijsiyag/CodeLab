@@ -2,7 +2,6 @@ import React from "react";
 import { NotificationManager } from "react-notifications";
 
 const notification = ({ type, title, message }) => {
-  console.log("In Notification Function");
   switch (type) {
     case "info":
       NotificationManager.info(title);

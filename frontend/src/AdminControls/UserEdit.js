@@ -15,7 +15,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Axios from "axios";
-import { useHistory } from "react-router";
 Axios.defaults.withCredentials = true;
 function Copyright(props) {
   return (
@@ -37,11 +36,11 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignUp() {
-  document.title = "SignUp CodeLab";
-  const [gender, setGender] = React.useState("Male");
-  const [profession, setProfession] = React.useState("Student");
-  const History = useHistory();
+export default function SignUp({ modalData, setIsEditOpen }) {
+  console.log(modalData);
+  document.title = "Edit User CodeLab";
+  const [gender, setGender] = React.useState(modalData.gender);
+  const [profession, setProfession] = React.useState(modalData.profession);
   const genderChangeHandler = (event) => {
     setGender(event.target.value);
   };
@@ -62,22 +61,21 @@ export default function SignUp() {
       profession: formData.get("profession"),
       institute: formData.get("institute"),
       email: formData.get("email"),
-      password: formData.get("password"),
     };
-    Axios.post(`${process.env.REACT_APP_SERVER_ADDRESS}/signup`, {
+    console.log(data);
+    Axios.post(`${process.env.REACT_APP_SERVER_ADDRESS}/edituser`, {
       data: { ...data },
     })
       .then((res) => {
         if (res.data.success === true) {
-          sessionStorage.setItem("LoggedIn", true);
-          History.push(-1);
+          setIsEditOpen(false);
+          alert("Data Updated Successfuly..");
         } else {
           alert(res.data.msg);
         }
       })
       .catch((err) => {
         console.log(err);
-        History.push("/");
       });
   };
 
@@ -97,7 +95,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Edit Profile
           </Typography>
           <Box
             component="form"
@@ -109,6 +107,7 @@ export default function SignUp() {
               <Grid item xs={12} sm={12}>
                 <TextField
                   name="name"
+                  defaultValue={modalData.name}
                   required
                   fullWidth
                   id="name"
@@ -121,6 +120,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="username"
+                  value={modalData.username}
                   label="username"
                   name="username"
                 />
@@ -146,6 +146,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="country"
+                  defaultValue={modalData.country}
                   label="Country"
                   name="country"
                 />
@@ -157,6 +158,7 @@ export default function SignUp() {
                   id="state"
                   label="State"
                   name="state"
+                  defaultValue={modalData.state}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -166,6 +168,7 @@ export default function SignUp() {
                   id="city"
                   label="City"
                   name="city"
+                  defaultValue={modalData.city}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -187,6 +190,7 @@ export default function SignUp() {
                   id="institute"
                   label="Institute"
                   name="institute"
+                  defaultValue={modalData.institute}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -197,25 +201,7 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I agree to the Terms and Conditions"
+                  defaultValue={modalData.email}
                 />
               </Grid>
             </Grid>
@@ -226,21 +212,8 @@ export default function SignUp() {
               sx={{ mt: 3, mb: 2 }}
               id="signup-btn"
             >
-              Sign Up
+              Save
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link
-                  variant="body2"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    History.push("/login");
-                  }}
-                >
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
         <Copyright sx={{ mt: 5 }} />

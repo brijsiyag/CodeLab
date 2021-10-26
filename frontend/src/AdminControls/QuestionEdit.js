@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QuestionAdd = () => {
+const QuestionAdd = ({ questionData }) => {
+  console.log(questionData);
   document.title = "Add Question CodeLab";
   const classes = useStyles();
   const [question_id, setQuestion_id] = useState("");
@@ -37,9 +38,11 @@ const QuestionAdd = () => {
   const [sampleInput, setSampleInput] = useState("");
   const [output, setOutput] = useState("");
   const [input, setInput] = useState("");
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(questionData.tags);
   const [author, setAuthor] = useState("");
-  const [difficulty_level, setDifficulty_level] = useState("Easy");
+  const [difficulty_level, setDifficulty_level] = useState(
+    questionData.difficulty_level
+  );
 
   const createNotification = (type, message, title) => {
     switch (type) {
@@ -61,7 +64,7 @@ const QuestionAdd = () => {
   };
 
   const submitHandler = async () => {
-    document.title = "Add Question CodeLab";
+    document.title = "Edit Question CodeLab";
     Axios.post(`${process.env.REACT_APP_SERVER_ADDRESS}/addQuestion`, {
       question: question,
       question_id: question_id,
@@ -105,6 +108,7 @@ const QuestionAdd = () => {
               fullWidth
               id="filled-basic"
               label="Question Name"
+              defaultValue={questionData.name}
               variant="outlined"
               onChange={(e) => {
                 setName(e.target.value);
@@ -114,6 +118,7 @@ const QuestionAdd = () => {
           <Grid item xs={6} sm={3}>
             <TextField
               fullWidth
+              defaultValue={questionData.question_id}
               id="filled-basic"
               label="Question Id"
               variant="outlined"
@@ -124,6 +129,7 @@ const QuestionAdd = () => {
           </Grid>
           <Grid item xs={6} sm={3}>
             <TextField
+              defaultValue={questionData.author}
               fullWidth
               id="filled-basic"
               label="Author"
@@ -142,7 +148,7 @@ const QuestionAdd = () => {
           }}
         >
           <Grid item xs={10} sm={5}>
-            <MultiValueInput setTags={setTags} tag={[]} />
+            <MultiValueInput setTags={setTags} tags={tags} />
           </Grid>
           <Grid item xs={10} sm={5}>
             <Select
@@ -171,6 +177,7 @@ const QuestionAdd = () => {
             label="Question"
             variant="outlined"
             id="question"
+            defaultValue={questionData.question}
             minRows={15}
             fullWidth={true}
             multiline={true}
@@ -184,6 +191,7 @@ const QuestionAdd = () => {
             id="filled-basic"
             label="Input Details"
             variant="outlined"
+            defaultValue={questionData.input_detail}
             multiline
             minRows={5}
             fullWidth
@@ -195,6 +203,7 @@ const QuestionAdd = () => {
           <TextField
             id="filled-basic"
             label="Output Details"
+            defaultValue={questionData.output_detail}
             variant="outlined"
             multiline
             minRows={5}
@@ -210,6 +219,7 @@ const QuestionAdd = () => {
             id="filled-basic"
             label="Sample Input"
             variant="outlined"
+            defaultValue={questionData.sample_input}
             multiline
             minRows={5}
             fullWidth
@@ -222,6 +232,7 @@ const QuestionAdd = () => {
             id="filled-basic"
             label="Sample Output"
             variant="outlined"
+            defaultValue={questionData.sample_output}
             multiline
             minRows={5}
             fullWidth

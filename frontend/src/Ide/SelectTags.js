@@ -1,6 +1,6 @@
 import React from "react";
 import "./SelectTags.css";
-import LangData from "./LangData";
+import { langToAce, exts } from "./LangData";
 const SelectTags = ({
   setLang,
   setFontSize,
@@ -10,14 +10,14 @@ const SelectTags = ({
 }) => {
   const selectChangeLang = (e) => {
     const lang = e.target.value;
-    const langext = LangData.exts[lang];
+    const langext = exts[lang];
     if (langext !== undefined) {
       setDownloadExt(langext);
     } else {
       setDownloadExt(".txt");
     }
     setLang(lang);
-    setMode(LangData.langToAce[lang]);
+    setMode(langToAce[lang]);
   };
   const selectChangeFontSize = (e) => {
     setFontSize(e.target.value + "pt");

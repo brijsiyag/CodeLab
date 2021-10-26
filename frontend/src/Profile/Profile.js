@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Submissions from "./Submissions";
-import StarsIcon from "@mui/icons-material/Stars";
+import StarsIcon from "@mui/icons-material/Star";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import Axios from "axios";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import "./Profile.css";
 import ProfilePic from "./profile.png";
 Axios.defaults.withCredentials = true;
@@ -13,6 +13,7 @@ const Profile = () => {
   const [userData, setUserData] = useState({
     user: {},
     question_details: [],
+    stars: 1,
   });
   const [ac, setAc] = useState(100);
   const [wa, setWa] = useState(0);
@@ -32,17 +33,21 @@ const Profile = () => {
   const { username } = useParams();
   const History = useHistory();
   React.useEffect(() => {
-    Axios.get(`http://localhost:5000/userinfo/${username}`).then((res) => {
+    Axios.get(
+      `${process.env.REACT_APP_SERVER_ADDRESS}/userinfo/${username}`
+    ).then((res) => {
+      res.data.question_details.reverse();
+      res.data.stars = parseInt(res.data.user.rating / 300);
       console.log(res.data);
       setUserData(res.data);
       acWacount(res.data);
     });
-  }, []);
+  }, [username]);
   return (
     <div className="profile-container">
       <div className="profile-main-left">
         <div className="profile-pic-name-container">
-          <img src={ProfilePic} width="100px"></img>
+          <img src={ProfilePic} alt="Profile-pic" width="100px"></img>
           <h1 className="profile-name">{userData.user.name}</h1>
         </div>
         <div className="profile-user-info">
@@ -88,9 +93,9 @@ const Profile = () => {
         <div className="profile-main-right-upper">
           <h1 className="profile-rating">{userData.user.rating}</h1>
           <div className="profile-stars">
-            <StarsIcon style={{ color: "blue" }} />
-            <StarsIcon style={{ color: "blue" }} />
-            <StarsIcon style={{ color: "blue" }} />
+            {[...Array(userData.stars + 1)].map(() => (
+              <StarsIcon style={{ color: "blue" }} />
+            ))}
           </div>
           <div>CodeLab Rating</div>
           <div className="profile-global-rank-container">
@@ -116,24 +121,31 @@ const Profile = () => {
                   return (
                     <tr>
                       <td>{element.time}s</td>
-                      <td
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          History.push(`/question/${element.question_id}`);
-                        }}
-                      >
-                        {element.question_id}
+                      <td style={{ cursor: "pointer" }}>
+                        <Link
+                          to={{ pathname: `/question/${element.question_id}` }}
+                        >
+                          {element.question_id}
+                        </Link>
                       </td>
                       <td>
                         {element.status === "AC" ? (
-                          <CheckIcon style={{ color: "green" }} />
+                          <CheckIcon
+                            style={{ color: "green", fontWeight: "bolder" }}
+                          />
                         ) : (
                           <CloseIcon style={{ color: "red" }} />
                         )}
                       </td>
                       <td>{element.lang}</td>
                       <td>
-                        <button style={{ cursor: "pointer" }}>View</button>
+                        <Link
+                          to={{
+                            pathname: `/submission/${element.submission_id}`,
+                          }}
+                        >
+                          <button style={{ cursor: "pointer" }}>View</button>
+                        </Link>
                       </td>
                     </tr>
                   );

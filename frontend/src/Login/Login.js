@@ -37,24 +37,23 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
+  document.title = "SignIn CodeLab";
   const [userName, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const History = useHistory();
   const HandleSubmit = (event) => {
     axios
-      .post("http://localhost:5000/login", {
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/login`, {
         data: {
           userName: userName,
           password: password,
         },
       })
       .then((res) => {
-        if (res.data === true) {
+        if (res.data.success === true) {
           sessionStorage.setItem("LoggedIn", true);
-          document.querySelector("#navbar-log-in-out-btn").innerText =
-            "Log Out";
+          sessionStorage.setItem("isAdmin", res.data.admin);
           History.push(-1);
-          // window.location.reload();
         } else {
           setUserName("");
           setPassword("");
