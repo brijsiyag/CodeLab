@@ -1,6 +1,7 @@
 import React from "react";
 import Axios from "axios";
 import "./Leaderboard.css";
+import { Link } from "react-router-dom";
 const LeaderBoard = () => {
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
@@ -30,7 +31,11 @@ const LeaderBoard = () => {
             return (
               <tr>
                 <td>{index + 1}</td>
-                <td>{element.username}</td>
+                <td>
+                  <Link to={{ pathname: `/users/${element.username}` }}>
+                    {element.username}
+                  </Link>
+                </td>
                 <td>{element.rating}</td>
               </tr>
             );

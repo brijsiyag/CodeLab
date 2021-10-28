@@ -12,12 +12,13 @@ import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CodeIcon from "@mui/icons-material/Code";
-import AboutUs from "./AboutUs";
+import AboutUsModal from "./AboutUsModal";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import logo from "./codelab.svg";
 import Tooltip from "@mui/material/Tooltip";
 import Zoom from "@mui/material/Zoom";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { createNotification } from "../Notification";
 Axios.defaults.withCredentials = true;
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -51,9 +52,10 @@ export default function ButtonAppBar({
             sessionStorage.removeItem("isAdmin");
             setLoggedIn(false);
             setIsAdmin(false);
-            alert("Successfuly Logged Out!!");
+            createNotification("Successfuly logged out :)");
+            History.push("/");
           } else {
-            alert("Ooops! Something Went Wrong!!!");
+            createNotification("Oops! Something went wrong!!", "error", 3000);
           }
         })
         .catch((err) => {
@@ -67,9 +69,7 @@ export default function ButtonAppBar({
     Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/username`).then(
       (res) => {
         if (res.data.success === false) {
-          alert(
-            "There is some server side Error ! Please try after some time!!"
-          );
+          createNotification(res.data.err, "error", 3000);
         } else {
           History.push(`/users/${res.data}`);
         }
@@ -207,7 +207,7 @@ export default function ButtonAppBar({
           </Tooltip>
         </Toolbar>
       </AppBar>
-      <AboutUs aboutUs={aboutUs} setAboutUs={setAboutUs} />
+      <AboutUsModal aboutUs={aboutUs} setAboutUs={setAboutUs} />
     </Box>
   );
 }

@@ -4,3 +4,11 @@
   align-items: center;
   margin-bottom: 5vh;
 }
+.admin-page-no-questions,
+.admin-page-no-users {
+  font-size: 2rem;
+  font-weight: bolder;
+  color: rgb(177, 177, 177);
+  text-align: center;
+  margin: 20px;
+}

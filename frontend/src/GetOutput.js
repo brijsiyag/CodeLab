@@ -4,7 +4,6 @@ Axios.defaults.withCredentials = true;
 
 const getOutput = async (code, lang, input, question_id, btn_clicked) => {
   let url = `${process.env.REACT_APP_SERVER_ADDRESS}/`;
-  // url = url + (question_id === undefined) ? "run" : `submit/ + question_id`;
   if (
     (question_id === undefined && btn_clicked === "run") ||
     btn_clicked === "run"

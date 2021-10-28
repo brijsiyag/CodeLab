@@ -10,7 +10,7 @@ router.delete("/user/:username", async (req, res) => {
       [req.params.username],
       (err, result) => {
         if (err) {
-          return res.send({ success: false });
+          return res.send({ success: false, err: err.sqlMessage });
         }
         res.send({ success: true });
       }

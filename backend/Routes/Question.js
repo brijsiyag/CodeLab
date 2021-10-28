@@ -4,7 +4,7 @@ const connection = require("../Mysql");
 
 router.get("/question/:id", (req, res) => {
   connection.query(
-    "SELECT * FROM question WHERE question_id = ?",
+    "SELECT `question_id`, `name`, `question`, `tags`, `difficulty_level`, `sample_input`, `sample_output`, `input_detail`, `output_detail`, `submissions`, `author`, `date` FROM question WHERE question_id = ?",
     [req.params.id],
     (err, result) => {
       if (err || result.length == 0) {

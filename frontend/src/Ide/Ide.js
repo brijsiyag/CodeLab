@@ -5,12 +5,14 @@ import SelectTags from "./SelectTags";
 import RunInfo from "./RunInfo";
 import GetOutput from "../GetOutput";
 import AceEditor from "react-ace";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { Button } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
 import { useParams } from "react-router";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
+import { createNotification } from "../Notification";
+import { makeStyles } from "@material-ui/core/styles";
+import { StepLabel } from "@mui/material";
+import FileNameInput from "./FileNameInput";
 //Syntax Highlighters
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
@@ -61,7 +63,22 @@ import "ace-builds/src-noconflict/theme-cobalt";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/theme-xcode";
 
+const useStyles = makeStyles((theme) => ({
+  menuButton: {
+    marginLeft: "20px !important",
+    maxWidth: "fit-content !important",
+    maxHeight: "fit-content !important",
+    minWidth: "fit-content !important",
+    minHeight: "fit-content !important",
+  },
+  title: {
+    flexGrow: 1,
+  },
+  offset: theme.mixins.toolbar,
+}));
+
 const Ide = () => {
+  const classes = useStyles();
   document.title = "IDE CodeLab";
   const { question_id } = useParams();
   const [code, setCode] = useState("");
@@ -74,41 +91,30 @@ const Ide = () => {
   const [date, setDate] = useState("-");
   const [time, setTime] = useState("-");
   const [mem, setMem] = useState("-");
-  const [theme, setTheme] = useState("xcode");
+  const [theme, setTheme] = useState("Chrome");
   const [runInfoShow, setRunInfoShow] = useState(false);
   const [downloadExt, setDownloadExt] = useState(".cpp");
-  const createNotification = (type, message, title) => {
-    switch (type) {
-      case "info":
-        NotificationManager.info(title);
-        break;
-      case "success":
-        NotificationManager.success(message, title);
-        break;
-      case "warning":
-        NotificationManager.warning(message, title, 3000);
-        break;
-      case "error":
-        NotificationManager.error(message, title, 5000);
-        break;
-      default:
-        break;
-    }
-  };
+  const [fileName, setFileName] = useState(
+    question_id !== undefined ? question_id : "Code"
+  );
+  const [dialogOpen, setDialogOpen] = useState(false);
   const codeChange = (code) => {
     setCode(code);
   };
   const codeCopy = () => {
     navigator.clipboard.writeText(code);
+    createNotification("Code copied to clipboard.", "success", 3000);
   };
   const outputCopy = () => {
     navigator.clipboard.writeText(output);
+    createNotification("Output copied to clipboard.", "success", 3000);
   };
   const inputCopy = () => {
     navigator.clipboard.writeText(input);
+    createNotification("Input copied to clipboard.", "success", 3000);
   };
-  const getAns = async (e) => {
-    if (e.target.className === "run-btn") {
+  const getAns = async (task) => {
+    if (task === "run") {
       setOutput("");
       setRunInfoShow(false);
       const res = await GetOutput(code, lang, input, question_id, "run");
@@ -128,7 +134,7 @@ const Ide = () => {
       setRunInfoShow(false);
       const res = await GetOutput(code, lang, input, question_id, "submit");
       if (res.success === false) {
-        alert("Please try again!!");
+        createNotification(res.err, "error", 3000);
       } else {
         if (res.statusCode >= 400 && res.statusCode < 500) {
           res.Status = res.error;
@@ -142,11 +148,11 @@ const Ide = () => {
         setDate(res.date);
         setRunInfoShow(true);
         createNotification(
-          res.status === "AC" ? "success" : "error",
           res.status === "AC"
             ? "All Test Cases Passed"
             : "Some Test cases not Passed",
-          res.status === "AC" ? "Accepted" : "Wrong Answer"
+          res.status === "AC" ? "success" : "info",
+          3000
         );
       }
     }
@@ -158,9 +164,21 @@ const Ide = () => {
     element.download = `code${downloadExt}`;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
+    createNotification(
+      `${fileName}${downloadExt} downloaded.`,
+      "success",
+      3000
+    );
   };
   return (
     <div className="ide-body">
+      <FileNameInput
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        fileName={fileName}
+        setFileName={setFileName}
+        downloadCode={downloadCode}
+      />
       <div className="ide-container">
         <div className="intro">
           <div className="ide-heading">Code, Compile & Run</div>
@@ -178,12 +196,23 @@ const Ide = () => {
               setDownloadExt={setDownloadExt}
             />
             <div style={{ display: "flex" }}>
-              <button onClick={codeCopy} className="copy-btn">
-                Copy
-              </button>
-              <div onClick={downloadCode} style={{ marginRight: "15px" }}>
-                <i className="fas fa-download"></i>
-              </div>
+              <Button
+                onClick={codeCopy}
+                variant="outlined"
+                className={classes.menuButton}
+              >
+                <ContentCopyIcon fontSize="small" />
+              </Button>
+              <Button
+                className={classes.menuButton}
+                onClick={() => {
+                  setDialogOpen(true);
+                }}
+                style={{ marginRight: "15px" }}
+                variant="outlined"
+              >
+                <DownloadIcon fontSize="small" />
+              </Button>
             </div>
           </div>
           <div className="main-container">
@@ -199,18 +228,27 @@ const Ide = () => {
               />
               <div className="ide-controller">
                 <div className="run-btn-container">
-                  <button className="run-btn" onClick={getAns}>
+                  <Button
+                    color="info"
+                    variant="contained"
+                    onClick={() => {
+                      getAns("run");
+                    }}
+                  >
                     Run
-                  </button>
+                  </Button>
                 </div>
                 <div className="submit-btn-container">
-                  <button
-                    className="submit-btn"
-                    onClick={getAns}
-                    hidden={question_id === undefined}
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    sx={{ display: question_id === undefined && "none" }}
+                    onClick={() => {
+                      getAns("submit");
+                    }}
                   >
                     Submit
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -220,10 +258,14 @@ const Ide = () => {
             >
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <div className="output-header">
-                  <label htmlFor="output-container">Input</label>
-                  <button onClick={inputCopy} className="output-copy-btn">
-                    Copy
-                  </button>
+                  <StepLabel htmlFor="output-container">Input</StepLabel>
+                  <Button
+                    onClick={inputCopy}
+                    variant="outlined"
+                    className={classes.menuButton}
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </Button>
                 </div>
                 <textarea
                   className="input-container"
@@ -237,10 +279,14 @@ const Ide = () => {
               </div>
               <div>
                 <div className="output-header">
-                  <label htmlFor="output-container">Output </label>
-                  <button onClick={outputCopy} className="output-copy-btn">
-                    Copy
-                  </button>
+                  <StepLabel htmlFor="output-container">Output </StepLabel>
+                  <Button
+                    onClick={outputCopy}
+                    variant="outlined"
+                    className={classes.menuButton}
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </Button>
                 </div>
                 <textarea
                   className="output-container"
@@ -260,7 +306,6 @@ const Ide = () => {
           )}
         </div>
       </div>
-      <NotificationContainer />
     </div>
   );
 };

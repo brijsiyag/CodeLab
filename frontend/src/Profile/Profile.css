@@ -10,8 +10,7 @@
 }
 
 .profile-main-left {
-  /* flex-grow: 1.7; */
-  flex-basis: 70%;
+  width: 70%;
   border-right: 1px solid rgb(185, 185, 185);
   padding: 15px;
 }
@@ -44,11 +43,12 @@
 
 .profile-name {
   padding-left: 15px;
+  font-size: 2rem;
+  font-weight: bolder;
 }
 
 .profile-main-right {
-  /* flex-grow: 1; */
-  flex-basis: 30%;
+  width: 30%;
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -79,15 +79,11 @@
   border-radius: 5px;
   max-height: 50vh;
   overflow: auto;
-  position: relative;
 }
 
 .profile-recent-activity-container table {
   font-size: 0.9rem;
 }
-.profile-recent-activity-container tbody {
-}
-
 .profile-recent-activity-container thead {
   font-weight: bolder;
 }
@@ -100,4 +96,19 @@
 
 .profile-recent-activity-container tbody tr:last-child {
   box-shadow: rgb(65, 65, 65) 0px 0px;
+}
+
+.profile-recent-activities-no-submissions {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 10px auto;
+  font-weight: bold;
+  color: rgb(173, 173, 173);
+}
+.users-no-submissions {
+  border: none;
+  font-size: 2rem;
+  margin-top: 20px;
+  color: rgb(179, 179, 179);
+  text-align: center;
 }

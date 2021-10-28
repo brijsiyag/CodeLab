@@ -1,5 +1,4 @@
 .question-page {
-  position: relative;
   display: flex;
   flex-direction: column;
   margin-top: 5vh;
@@ -107,7 +106,7 @@
 }
 
 .submit-link {
-  margin: auto;
+  margin: 10px auto;
 }
 
 .question-submit {
@@ -130,10 +129,10 @@
 
 .question-right-panel {
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   flex-basis: 35%;
-  min-height: 100vw;
 }
 
 .question-tags-main-container {
@@ -144,6 +143,7 @@
   flex-direction: column;
   align-items: center;
   padding: 5px 10px;
+  max-width: 80%;
 }
 .question-tags-heading {
   font-size: 1.3rem;
@@ -167,8 +167,8 @@
 .question-submission-table {
   border: 2px solid gray;
   border-radius: 5px;
-  max-height: 500px;
-  max-width: 300px;
+  max-height: 20rem;
+  max-width: 80%;
   width: 100%;
   margin: 30px auto;
   padding: 20px;
@@ -215,10 +215,10 @@
   padding: 30px;
   display: flex;
   flex-direction: column;
-  max-height: 70%;
-  overflow: auto;
-}
-.question-related-questions-container {
+  max-height: 45rem;
+  overflow-y: auto;
+  position: relative;
+  margin: 20px auto;
 }
 .question-related-questions-heading {
   font-size: 2rem;

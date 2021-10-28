@@ -7,13 +7,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@mui/material/Grid";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
+import { createNotification } from "../Notification";
 import Axios from "axios";
 import MultiValueInput from "./MultiValueInput";
-import "react-notifications/lib/notifications.css";
 Axios.defaults.withCredentials = true;
 
 const useStyles = makeStyles((theme) => ({
@@ -46,25 +42,6 @@ const QuestionAdd = ({ questionData, setIsQuestionEditOpen }) => {
     questionData.difficulty_level
   );
 
-  const createNotification = (type, message, title) => {
-    switch (type) {
-      case "info":
-        NotificationManager.info(title);
-        break;
-      case "success":
-        NotificationManager.success(message, title);
-        break;
-      case "warning":
-        NotificationManager.warning(message, title, 3000);
-        break;
-      case "error":
-        NotificationManager.error(message, title, 5000);
-        break;
-      default:
-        break;
-    }
-  };
-
   const submitHandler = async () => {
     Axios.post(`${process.env.REACT_APP_SERVER_ADDRESS}/editquestion`, {
       question: question,
@@ -82,11 +59,10 @@ const QuestionAdd = ({ questionData, setIsQuestionEditOpen }) => {
       original_question_id: questionData.question_id,
     }).then((res) => {
       if (res.data.success === false) {
-        createNotification("error", res.data.sqlMessage, "Error");
+        createNotification(res.data.error, "error", 4000);
       } else {
         setIsQuestionEditOpen(false);
-        alert("Question Updated Successfuly...");
-        createNotification("success", "Question Added Successfuly", "Success");
+        createNotification("Question edited successfuly.", "success", 4000);
       }
     });
   };
@@ -282,7 +258,6 @@ const QuestionAdd = ({ questionData, setIsQuestionEditOpen }) => {
           Submit
         </Button>
       </form>
-      <NotificationContainer />
     </div>
   );
 };

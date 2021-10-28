@@ -23,6 +23,7 @@ import Profile from "./Profile/Profile";
 import PageNotFound_404 from "./PageNotFound_404";
 import Submission from "./Submission/Submission";
 import AdminPage from "./AdminControls/AdminPage";
+import { Notification } from "./Notification";
 Axios.defaults.withCredentials = true;
 
 console.log(process.env);
@@ -120,6 +121,7 @@ function App() {
         <Footer />
       </Router>
       <CookieConsent />
+      <Notification />
     </div>
   );
 }

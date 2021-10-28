@@ -6,10 +6,19 @@ import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 import UserEditModal from "../AdminControls/UserEditModal";
 import Axios from "axios";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import "./Profile.css";
 import ProfilePic from "./profile.png";
 import { Button } from "@mui/material";
+import { createNotification } from "../Notification";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
+import Paper from "@mui/material/Paper";
 Axios.defaults.withCredentials = true;
 
 const Profile = () => {
@@ -45,9 +54,8 @@ const Profile = () => {
     Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/username`).then(
       (res) => {
         if (res.data.success === false) {
-          alert("Server Side Problem..");
+          createNotification(res.data.err, "error", 3000);
         } else {
-          console.log(res.data);
           setUsernameFromServer(res.data);
         }
       }
@@ -73,10 +81,11 @@ const Profile = () => {
         <div className="profile-main-left">
           <div className="profile-pic-name-container">
             <img src={ProfilePic} alt="Profile-pic" width="100px"></img>
-            <h1 className="profile-name">{userData.user.name}</h1>{" "}
+            <div className="profile-name">{userData.user.name}</div>{" "}
             {username === usernameFromServer && (
               <Button
                 onClick={() => setisProfileEditModal(!isProfileEditModal)}
+                size="small"
               >
                 <EditIcon />
               </Button>
@@ -110,7 +119,7 @@ const Profile = () => {
               </li>
               <li>
                 <label>Institution : </label>
-                <span>{userData.user.profession}</span>
+                <span>{userData.user.institute}</span>
               </li>
             </ul>
           </div>
@@ -131,29 +140,97 @@ const Profile = () => {
             </div>
             <div>CodeLab Rating</div>
             <div className="profile-global-rank-container">
-              <h2 className="profile-global-rank">134</h2>
+              <h2 className="profile-global-rank">
+                {userData.user.global_rank}
+              </h2>
               <div className="profile-global-rank-label">Global Rank</div>
             </div>
           </div>
           <div className="profile-main-right-lower">
             <h2>Recent Activity</h2>
-            <div className="profile-recent-activity-container">
-              <table>
-                <thead>
-                  <tr>
-                    <td>Time</td>
-                    <td>Problem</td>
-                    <td>Result</td>
-                    <td>Lang</td>
-                    <td>Solution</td>
-                  </tr>
-                </thead>
-                <tbody>
+            <TableContainer
+              component={Paper}
+              sx={{
+                maxWidth: "fit-content",
+                border: "gray 1px solid",
+                overflow: "auto",
+                margin: "auto",
+              }}
+            >
+              <Table className="profile-recent-activity-container">
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      sx={{
+                        fontWeight: "bolder",
+                        padding: "5px",
+                        paddingLeft: "5px",
+                      }}
+                    >
+                      Time.
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        fontWeight: "bolder",
+                        padding: "5px",
+                      }}
+                    >
+                      Problem
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        fontWeight: "bolder",
+                        padding: "5px",
+                      }}
+                      align="right"
+                    >
+                      Result
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        fontWeight: "bolder",
+                        padding: "5px",
+                      }}
+                      align="center"
+                    >
+                      Lang
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        fontWeight: "bolder",
+                        padding: "5px",
+                        paddingRight: "5px",
+                      }}
+                      align="right"
+                    >
+                      Solution
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
                   {userData.question_details.map((element) => {
                     return (
-                      <tr>
-                        <td>{element.time}s</td>
-                        <td style={{ cursor: "pointer" }}>
+                      <TableRow
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell
+                          sx={{
+                            fontWeight: "bolder",
+                            padding: "5px",
+                            paddingLeft: "5px",
+                          }}
+                          align="right"
+                        >
+                          {element.time === null ? "0.00" : element.time}s
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            padding: "5px",
+                          }}
+                          align="right"
+                        >
                           <Link
                             to={{
                               pathname: `/question/${element.question_id}`,
@@ -161,8 +238,13 @@ const Profile = () => {
                           >
                             {element.question_id}
                           </Link>
-                        </td>
-                        <td>
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            padding: "5px",
+                          }}
+                          align="right"
+                        >
                           {element.status === "AC" ? (
                             <CheckIcon
                               style={{ color: "green", fontWeight: "bolder" }}
@@ -170,9 +252,22 @@ const Profile = () => {
                           ) : (
                             <CloseIcon style={{ color: "red" }} />
                           )}
-                        </td>
-                        <td>{element.lang}</td>
-                        <td>
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            padding: "5px",
+                          }}
+                          align="right"
+                        >
+                          {element.lang}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            padding: "5px",
+                            paddingRight: "5px",
+                          }}
+                          align="right"
+                        >
                           <Link
                             to={{
                               pathname: `/submission/${element.submission_id}`,
@@ -180,13 +275,17 @@ const Profile = () => {
                           >
                             <button style={{ cursor: "pointer" }}>View</button>
                           </Link>
-                        </td>
-                      </tr>
+                        </TableCell>
+                      </TableRow>
                     );
                   })}
-                </tbody>
-              </table>
-            </div>
+                </TableBody>
+              </Table>
+              {userData.question_details !== undefined &&
+                userData.question_details.length === 0 && (
+                  <div className="users-no-submissions">No Submissions</div>
+                )}
+            </TableContainer>
           </div>
         </div>
       </div>

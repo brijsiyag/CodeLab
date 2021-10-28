@@ -6,7 +6,7 @@ router.get("/username", (req, res) => {
   if (req.cookies !== undefined) {
     return res.send(req.cookies.username);
   } else {
-    return res.send({ success: false });
+    return res.send({ success: false, err: "Please Login!!" });
   }
 });
 

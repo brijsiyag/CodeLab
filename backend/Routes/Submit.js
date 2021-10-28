@@ -8,16 +8,18 @@ router.post("/submit/:question_id", (req, res) => {
     "SELECT * FROM question WHERE question_id = ?",
     [req.params.question_id],
     (err, result_question) => {
-      if (err || result_question.length === 0) {
+      if (err) {
         console.log(err);
-        return res.send({ success: false });
+        return res.send({ success: false, err: err.sqlMessage });
+      } else if (result_question.length === 0) {
+        return res.send({ success: false, err: "No Question Found!!" });
       } else {
         connection.query(
           "SELECT * FROM user WHERE username = ?",
           [req.cookies.username],
           (err, user_result) => {
             if (user_result.length === 0) {
-              return res.send({ success: false });
+              return res.send({ success: false, err: "User not found!!" });
             } else {
               const program = {
                 script: req.body.code,
@@ -38,7 +40,7 @@ router.post("/submit/:question_id", (req, res) => {
                   console.log(data);
                   if (error) {
                     console.log(error);
-                    return res.send({ success: false });
+                    return res.send({ success: false, err: error.sqlMessage });
                   } else {
                     data.date = response.headers.date;
                     connection.query(
@@ -47,7 +49,10 @@ router.post("/submit/:question_id", (req, res) => {
                       (err, result) => {
                         if (err) {
                           console.log(err);
-                          return res.send({ success: false });
+                          return res.send({
+                            success: false,
+                            err: err.sqlMessage,
+                          });
                         } else {
                           connection.query(
                             "SELECT * FROM question_details WHERE question_id = ? AND status = 'AC' AND username = ?",
@@ -55,18 +60,23 @@ router.post("/submit/:question_id", (req, res) => {
                             (err, result) => {
                               if (err) {
                                 console.log(err);
-                                return res.send({ success: false });
+                                return res.send({
+                                  success: false,
+                                  err: err.sqlMessage,
+                                });
                               }
                               if (
+                                result_question[0].output !== null &&
+                                data.output !== null &&
                                 JSON.stringify(
                                   result_question[0].output.replace(
                                     /(\r\n|\n|\r)/g,
                                     ""
                                   )
                                 ) ===
-                                JSON.stringify(
-                                  data.output.replace(/(\r\n|\n|\r)/g, "")
-                                )
+                                  JSON.stringify(
+                                    data.output.replace(/(\r\n|\n|\r)/g, "")
+                                  )
                               ) {
                                 data.status = "AC";
                               } else {
@@ -99,7 +109,10 @@ router.post("/submit/:question_id", (req, res) => {
                                 (err, result) => {
                                   if (err) {
                                     console.log(err);
-                                    return res.send({ success: false });
+                                    return res.send({
+                                      success: false,
+                                      err: err.sqlMessage,
+                                    });
                                   }
                                 }
                               );
@@ -118,7 +131,10 @@ router.post("/submit/:question_id", (req, res) => {
                                 (err, result) => {
                                   if (err) {
                                     console.log(err);
-                                    return res.send({ success: false });
+                                    return res.send({
+                                      success: false,
+                                      err: err.sqlMessage,
+                                    });
                                   } else {
                                     return res.send(data);
                                   }

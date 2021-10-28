@@ -7,13 +7,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@mui/material/Grid";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
 import Axios from "axios";
 import MultiValueInput from "./MultiValueInput";
-import "react-notifications/lib/notifications.css";
+import { createNotification } from "../Notification";
 Axios.defaults.withCredentials = true;
 
 const useStyles = makeStyles((theme) => ({
@@ -41,25 +37,6 @@ const QuestionAdd = () => {
   const [author, setAuthor] = useState("");
   const [difficulty_level, setDifficulty_level] = useState("Easy");
 
-  const createNotification = (type, message, title) => {
-    switch (type) {
-      case "info":
-        NotificationManager.info(title);
-        break;
-      case "success":
-        NotificationManager.success(message, title);
-        break;
-      case "warning":
-        NotificationManager.warning(message, title, 3000);
-        break;
-      case "error":
-        NotificationManager.error(message, title, 5000);
-        break;
-      default:
-        break;
-    }
-  };
-
   const submitHandler = async () => {
     document.title = "Add Question CodeLab";
     Axios.post(`${process.env.REACT_APP_SERVER_ADDRESS}/addQuestion`, {
@@ -77,9 +54,9 @@ const QuestionAdd = () => {
       name: name,
     }).then((res) => {
       if (res.data.success === false) {
-        createNotification("error", res.data.sqlMessage, "Error");
+        createNotification(res.data.err, "error", 3000);
       } else {
-        createNotification("success", "Question Added Successfuly", "Success");
+        createNotification("Question Added Successfuly", "success", 3000);
       }
     });
   };
@@ -267,7 +244,6 @@ const QuestionAdd = () => {
           Submit
         </Button>
       </form>
-      <NotificationContainer />
     </div>
   );
 };

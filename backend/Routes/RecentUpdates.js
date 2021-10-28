@@ -8,7 +8,7 @@ router.get("/recentactivities", (req, res) => {
     (err, result) => {
       if (err) {
         console.log(err);
-        return res.send(err);
+        return res.send({ success: false, err: err.sqlMessage });
       } else {
         return res.send(result);
       }

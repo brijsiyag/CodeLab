@@ -18,14 +18,29 @@ router.get("/userinfo/:username", (req, res) => {
           "SELECT  `question_id`, `username`, `status`, `time`, `space`, `submission_id`, `submission_date`, `lang` FROM question_details WHERE username = ?",
           [username],
           (err, result_question_details) => {
+            if (err) {
+              return res.send({ success: false, err: err.sqlMessage });
+            }
             result_user[0].password = "";
             if (username !== req.cookies.username) {
               result_user[0].email = "";
             }
-            return res.send({
-              user: result_user[0],
-              question_details: result_question_details,
-            });
+            connection.query(
+              "SELECT username,rank() OVER (ORDER by rating desc ) AS 'rank' FROM user",
+              (err, rank_result) => {
+                if (err) {
+                  return res.send({ success: false, err: err.sqlMessage });
+                }
+                rank_result = rank_result.filter((element) => {
+                  return element.username === username;
+                });
+                result_user[0].global_rank = rank_result[0].rank;
+                return res.send({
+                  user: result_user[0],
+                  question_details: result_question_details,
+                });
+              }
+            );
           }
         );
       }

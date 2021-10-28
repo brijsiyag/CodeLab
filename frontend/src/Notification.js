@@ -1,21 +1,66 @@
-import React from "react";
-import { NotificationManager } from "react-notifications";
+import React, { useState } from "react";
+import Stack from "@mui/material/Stack";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
-const notification = ({ type, title, message }) => {
-  switch (type) {
-    case "info":
-      NotificationManager.info(title);
-      break;
-    case "success":
-      NotificationManager.success(message, title);
-      break;
-    case "warning":
-      NotificationManager.warning(message, title, 3000);
-      break;
-    case "error":
-      NotificationManager.error(message, title, 5000);
-      break;
+let open = false,
+  setOpen,
+  message,
+  setMessage,
+  severity,
+  setSeverity,
+  timeout,
+  setTimeout;
+
+const createNotification = (gotMessage, gotSeverity, timeout) => {
+  setOpen(false);
+  setMessage(gotMessage);
+  setSeverity(gotSeverity);
+  if (timeout !== undefined) {
+    setTimeout(timeout);
   }
+  setOpen(true);
 };
 
-export default notification;
+function TransitionDown(props) {
+  return <Slide {...props} direction="down" />;
+}
+
+const Notification = () => {
+  [open, setOpen] = useState(false);
+  [message, setMessage] = useState("");
+  [severity, setSeverity] = useState("");
+  [timeout, setTimeout] = useState(3000);
+  React.useEffect(() => {
+    setTimeout(() => {
+      setOpen(false);
+    }, 1000);
+  }, []);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+  return (
+    <Stack spacing={2} sx={{ width: "100%" }}>
+      <Snackbar
+        open={open}
+        autoHideDuration={timeout}
+        TransitionComponent={TransitionDown}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
+    </Stack>
+  );
+};
+export { createNotification, Notification };

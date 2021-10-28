@@ -26,8 +26,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        CodeLab
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -72,7 +72,7 @@ export default function SignUp() {
           sessionStorage.setItem("LoggedIn", true);
           History.push(-1);
         } else {
-          alert(res.data.msg);
+          alert(res.data.err);
         }
       })
       .catch((err) => {

@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { createNotification } from "../Notification";
 axios.defaults.withCredentials = true;
 
 function Copyright(props) {
@@ -57,7 +58,7 @@ export default function SignInSide() {
         } else {
           setUserName("");
           setPassword("");
-          alert("Invalid Id or Password....");
+          createNotification(res.data.err, "error", 3000);
         }
       })
       .catch((err) => {

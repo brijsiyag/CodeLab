@@ -24,7 +24,7 @@ router.post("/addquestion", (req, res) => {
     (err, result) => {
       if (err) {
         console.log(err);
-        return res.send({ ...err, success: false });
+        return res.send({ err: err.sqlMessage, success: false });
       } else {
         let tag = "";
         JSON.parse(req.body.tags).map((element) => {

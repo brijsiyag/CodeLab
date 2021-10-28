@@ -12,6 +12,8 @@ import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import UserEditModal from "./UserEditModal";
+import { createNotification } from "../Notification";
+import { Link } from "react-router-dom";
 Axios.defaults.withCredentials = true;
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -35,7 +37,7 @@ export default function BasicTable() {
   useEffect(() => {
     Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/users`).then((res) => {
       if (res.data.success === false) {
-        alert("Something wrong with server! Please try again !!");
+        createNotification(res.data.err, "error", 3000);
       } else {
         setRows(res.data);
       }
@@ -49,9 +51,9 @@ export default function BasicTable() {
       if (res.data.success === true) {
         rows = rows.filter((item, index1) => index !== index1);
         setRows(rows);
-        alert("User Deleted Successfuly...");
+        createNotification("User Deleted Successfuly...", "success", 3000);
       } else {
-        alert("Something Error in Server...");
+        createNotification(res.data.err, "error", 3000);
       }
     });
   };
@@ -138,7 +140,9 @@ export default function BasicTable() {
                   scope="row"
                   sx={{ fontWeight: "bolder" }}
                 >
-                  {row.username}
+                  <Link to={{ pathname: `/users/${row.username}` }}>
+                    {row.username}
+                  </Link>
                 </TableCell>
                 <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">{row.rating}</TableCell>
@@ -173,6 +177,9 @@ export default function BasicTable() {
             ))}
           </TableBody>
         </Table>
+        {rows.length === 0 && (
+          <div className="admin-page-no-users">No Users</div>
+        )}
       </TableContainer>
     </>
   );

@@ -11,13 +11,13 @@ router.post("/signup", (req, res) => {
       if (err) {
         return res.send({
           success: false,
-          msg: "Can't Create Account,Please Try Again!!",
+          err: err.sqlMessage,
         });
       } else {
         if (result.length > 0) {
           return res.send({
             success: false,
-            msg: "Duplicate Username or Email",
+            msg: "User already exists!!",
           });
         } else {
           connection.query(
@@ -41,7 +41,7 @@ router.post("/signup", (req, res) => {
                 console.log(err);
                 return res.send({
                   success: false,
-                  msg: "Can't Create Account,Please Try Again!!",
+                  err: err.sqlMessage,
                 });
               } else {
                 UpdateActivities(`New user ${req.body.data.username} joined.`);

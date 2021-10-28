@@ -1,6 +1,12 @@
 import React from "react";
 import "./SelectTags.css";
 import { langToAce, exts } from "./LangData";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { Input, TextField } from "@mui/material";
 const SelectTags = ({
   setLang,
   setFontSize,
@@ -27,113 +33,131 @@ const SelectTags = ({
   };
   return (
     <div style={{ display: "flex" }} className="SelectTags">
-      <div>
-        <label htmlFor="language" className="lang-label">
-          Language:
-        </label>
-        <select id="language" onChange={selectChangeLang} defaultValue="cpp17">
-          <option value="java">Java</option>
-          <option value="c">C</option>
-          <option value="cpp">C++</option>
-          <option value="cpp14">C++ 14</option>
-          <option value="cpp17">C++ 17</option>
-          <option value="python2">Python 2</option>
-          <option value="python3">Python 3</option>
-          <option value="kotlin">Kotlin</option>
-          <option value="swift">Swift</option>
-          <option value="go">Go Lang</option>
-          <option value="bash">Bash Shell</option>
-          <option value="csharp">C#</option>
-          <option value="nodejs">NodeJS</option>
-          <option value="rust">RUST</option>
-          <option value="sql">SQL</option>
-          <option value="php">PHP</option>
-          <option value="c99">C-99</option>
-          <option value="perl">Perl</option>
-          <option value="ruby">Ruby</option>
-          <option value="scala">Scala</option>
-          <option value="pascal">Pascal</option>
-          <option value="vbn">VB.Net</option>
-          <option value="haskell">Haskell</option>
-          <option value="objc">Objective C </option>
-          <option value="groovy">Groovy</option>
-          <option value="fortran">Fortran</option>
-          <option value="brainfuck">Brainfuck</option>
-          <option value="lua">Lua</option>
-          <option value="tcl">TCL</option>
-          <option value="hack">Hack</option>
-          <option value="d">D</option>
-          <option value="ada">Ada</option>
-          <option value="r">R Language</option>
-          <option value="freebasic">Free Basic</option>
-          <option value="verilog">Verilog</option>
-          <option value="cobol">Cobol</option>
-          <option value="dart">Dart</option>
-          <option value="yabasic">YaBasic</option>
-          <option value="clojure">Clojure</option>
-          <option value="scheme">Scheme</option>
-          <option value="forth">Forth</option>
-          <option value="prolog">Prolog</option>
-          <option value="octave">Octave</option>
-          <option value="coffeescript">CoffeeScript</option>
-          <option value="icon">Icon</option>
-          <option value="fsharp">F#</option>
-          <option value="nasm">Assembler - NASM</option>
-          <option value="intercal">Intercal</option>
-          <option value="nemerle">Nemerle</option>
-          <option value="ocaml">Ocaml</option>
-          <option value="unlambda">Unlambda</option>
-          <option value="picolisp">Picolisp</option>
-          <option value="spidermonkey">SpiderMonkey</option>
-          <option value="rhino">Rhino JS</option>
-          <option value="bc">BC</option>
-          <option value="clisp">Clisp</option>
-          <option value="elixir">Elixir</option>
-          <option value="factor">Factor</option>
-          <option value="falcon">Falcon</option>
-          <option value="fantom">Fantom</option>
-          <option value="nim">Nim</option>
-          <option value="pike">Pike</option>
-          <option value="smalltalk">SmallTalk</option>
-          <option value="mozart">OZ Mozart</option>
-          <option value="lolcode">LoL Code</option>
-          <option value="racket">Racket</option>
-          <option value="whitespace">WhiteSpace</option>
-          <option value="erlang">Erlang</option>
-          <option value="jlang">J</option>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="fontSize" className="lang-label">
-          Font Size:
-        </label>
-        <input
+      <FormControl
+        variant="standard"
+        sx={{ minWidth: 120, fontSize: "10px", margin: "0 5px 0 10px" }}
+      >
+        <InputLabel sx={{ fontSize: "1rem" }} id="language">
+          Language
+        </InputLabel>
+        <Select
+          sx={{ fontSize: "0.7rem" }}
+          labelId="language"
+          onChange={selectChangeLang}
+          defaultValue="cpp17"
+          label="Age"
+        >
+          <MenuItem value="java">Java</MenuItem>
+          <MenuItem value="c">C</MenuItem>
+          <MenuItem value="cpp">C++</MenuItem>
+          <MenuItem value="cpp14">C++ 14</MenuItem>
+          <MenuItem value="cpp17">C++ 17</MenuItem>
+          <MenuItem value="python2">Python 2</MenuItem>
+          <MenuItem value="python3">Python 3</MenuItem>
+          <MenuItem value="kotlin">Kotlin</MenuItem>
+          <MenuItem value="swift">Swift</MenuItem>
+          <MenuItem value="go">Go Lang</MenuItem>
+          <MenuItem value="bash">Bash Shell</MenuItem>
+          <MenuItem value="csharp">C#</MenuItem>
+          <MenuItem value="nodejs">NodeJS</MenuItem>
+          <MenuItem value="rust">RUST</MenuItem>
+          <MenuItem value="sql">SQL</MenuItem>
+          <MenuItem value="php">PHP</MenuItem>
+          <MenuItem value="c99">C-99</MenuItem>
+          <MenuItem value="perl">Perl</MenuItem>
+          <MenuItem value="ruby">Ruby</MenuItem>
+          <MenuItem value="scala">Scala</MenuItem>
+          <MenuItem value="pascal">Pascal</MenuItem>
+          <MenuItem value="vbn">VB.Net</MenuItem>
+          <MenuItem value="haskell">Haskell</MenuItem>
+          <MenuItem value="objc">Objective C </MenuItem>
+          <MenuItem value="groovy">Groovy</MenuItem>
+          <MenuItem value="fortran">Fortran</MenuItem>
+          <MenuItem value="brainfuck">Brainfuck</MenuItem>
+          <MenuItem value="lua">Lua</MenuItem>
+          <MenuItem value="tcl">TCL</MenuItem>
+          <MenuItem value="hack">Hack</MenuItem>
+          <MenuItem value="d">D</MenuItem>
+          <MenuItem value="ada">Ada</MenuItem>
+          <MenuItem value="r">R Language</MenuItem>
+          <MenuItem value="freebasic">Free Basic</MenuItem>
+          <MenuItem value="verilog">Verilog</MenuItem>
+          <MenuItem value="cobol">Cobol</MenuItem>
+          <MenuItem value="dart">Dart</MenuItem>
+          <MenuItem value="yabasic">YaBasic</MenuItem>
+          <MenuItem value="clojure">Clojure</MenuItem>
+          <MenuItem value="scheme">Scheme</MenuItem>
+          <MenuItem value="forth">Forth</MenuItem>
+          <MenuItem value="prolog">Prolog</MenuItem>
+          <MenuItem value="octave">Octave</MenuItem>
+          <MenuItem value="coffeescript">CoffeeScript</MenuItem>
+          <MenuItem value="icon">Icon</MenuItem>
+          <MenuItem value="fsharp">F#</MenuItem>
+          <MenuItem value="nasm">Assembler - NASM</MenuItem>
+          <MenuItem value="intercal">Intercal</MenuItem>
+          <MenuItem value="nemerle">Nemerle</MenuItem>
+          <MenuItem value="ocaml">Ocaml</MenuItem>
+          <MenuItem value="unlambda">Unlambda</MenuItem>
+          <MenuItem value="picolisp">Picolisp</MenuItem>
+          <MenuItem value="spidermonkey">SpiderMonkey</MenuItem>
+          <MenuItem value="rhino">Rhino JS</MenuItem>
+          <MenuItem value="bc">BC</MenuItem>
+          <MenuItem value="clisp">Clisp</MenuItem>
+          <MenuItem value="elixir">Elixir</MenuItem>
+          <MenuItem value="factor">Factor</MenuItem>
+          <MenuItem value="falcon">Falcon</MenuItem>
+          <MenuItem value="fantom">Fantom</MenuItem>
+          <MenuItem value="nim">Nim</MenuItem>
+          <MenuItem value="pike">Pike</MenuItem>
+          <MenuItem value="smalltalk">SmallTalk</MenuItem>
+          <MenuItem value="mozart">OZ Mozart</MenuItem>
+          <MenuItem value="lolcode">LoL Code</MenuItem>
+          <MenuItem value="racket">Racket</MenuItem>
+          <MenuItem value="whitespace">WhiteSpace</MenuItem>
+          <MenuItem value="erlang">Erlang</MenuItem>
+          <MenuItem value="jlang">J</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl variant="standard" sx={{ maxWidth: 80, margin: "0 5px" }}>
+        <InputLabel sx={{ fontSize: "1rem" }} id="theme">
+          Font Size
+        </InputLabel>
+        <Input
+          sx={{ fontSize: "0.7rem" }}
+          label="Font Size"
           type="number"
-          id="fontSize"
+          variant="standard"
           onChange={selectChangeFontSize}
-          defaultValue="14"
-        ></input>
-      </div>
-      <div>
-        <label htmlFor="theme" className="theme-label">
-          Theme:
-        </label>
-        <select id="theme" onChange={selectChangeTheme} defaultValue="Chrome">
-          <option value="chrome">Chrome</option>
-          <option value="monokai">Monokai</option>
-          <option value="tomorrow">Tomorrow</option>
-          <option value="tomorrow_night">Tomorrow Night</option>
-          <option value="tomorrow_night_eighties">
+          defaultValue={14}
+        ></Input>
+      </FormControl>
+      <FormControl variant="standard" sx={{ minWidth: 120, margin: "0 5px" }}>
+        <InputLabel sx={{ fontSize: "1rem" }} id="theme">
+          Theme
+        </InputLabel>
+        <Select
+          sx={{ fontSize: "0.7rem" }}
+          labelId="theme"
+          onChange={selectChangeTheme}
+          defaultValue="chrome"
+        >
+          <MenuItem value="chrome">Chrome</MenuItem>
+          <MenuItem value="monokai">Monokai</MenuItem>
+          <MenuItem value="tomorrow">Tomorrow</MenuItem>
+          <MenuItem value="tomorrow_night">Tomorrow Night</MenuItem>
+          <MenuItem value="tomorrow_night_eighties">
             Tomorrow Night Eighties
-          </option>
-          <option value="tomorrow_night_bright">Tomorrow Night Bright</option>
-          <option value="solarized_light">Solarized Light</option>
-          <option value="solarized_dark">Solarized Dark</option>
-          <option value="cobalt">Cobalt</option>
-          <option value="twilight">Twilight</option>
-          <option value="xcode">Xcode</option>
-        </select>
-      </div>
+          </MenuItem>
+          <MenuItem value="tomorrow_night_bright">
+            Tomorrow Night Bright
+          </MenuItem>
+          <MenuItem value="solarized_light">Solarized Light</MenuItem>
+          <MenuItem value="solarized_dark">Solarized Dark</MenuItem>
+          <MenuItem value="cobalt">Cobalt</MenuItem>
+          <MenuItem value="twilight">Twilight</MenuItem>
+          <MenuItem value="xcode">Xcode</MenuItem>
+        </Select>
+      </FormControl>
     </div>
   );
 };

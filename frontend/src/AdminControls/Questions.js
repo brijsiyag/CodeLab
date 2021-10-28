@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import QuestionEditModal from "./QuestionEditModal";
+import { createNotification } from "../Notification";
 Axios.defaults.withCredentials = true;
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -36,7 +37,7 @@ export default function BasicTable() {
     Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/questions`).then(
       (res) => {
         if (res.data.success === false) {
-          alert("Something wrong with server! Please try again !!");
+          createNotification(res.data.err, "error", 3000);
         } else {
           console.log(res.data);
           res.data.map((element) => {
@@ -56,9 +57,9 @@ export default function BasicTable() {
       if (res.data.success === true) {
         rows = rows.filter((item, index1) => index !== index1);
         setRows(rows);
-        alert("Question Deleted Successfuly...");
+        createNotification("Question Deleted Successfuly...", "success", 3000);
       } else {
-        alert("Something Error in Server...");
+        createNotification(res.data.err, "error", 3000);
       }
     });
   };
@@ -191,6 +192,9 @@ export default function BasicTable() {
             ))}
           </TableBody>
         </Table>
+        {rows.length === 0 && (
+          <div className="admin-page-no-questions">No Questions</div>
+        )}
       </TableContainer>
     </>
   );

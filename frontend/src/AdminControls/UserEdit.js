@@ -14,7 +14,9 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { createNotification } from "../Notification";
 import Axios from "axios";
+
 Axios.defaults.withCredentials = true;
 function Copyright(props) {
   return (
@@ -25,8 +27,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        CodeLab
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -69,9 +71,9 @@ export default function SignUp({ modalData, setIsEditOpen }) {
       .then((res) => {
         if (res.data.success === true) {
           setIsEditOpen(false);
-          alert("Data Updated Successfuly..");
+          createNotification("Profile Updated Successfuly..", "success", 3000);
         } else {
-          alert(res.data.msg);
+          createNotification(res.data.err, "error", 3000);
         }
       })
       .catch((err) => {

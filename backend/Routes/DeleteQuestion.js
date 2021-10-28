@@ -10,7 +10,7 @@ router.delete("/question/:question_id", async (req, res) => {
       [req.params.question_id],
       (err, result) => {
         if (err) {
-          return res.send({ success: false });
+          return res.send({ success: false, err: err.sqlMessage });
         }
         res.send({ success: true });
       }

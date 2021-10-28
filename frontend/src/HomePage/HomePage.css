@@ -9,8 +9,9 @@
 }
 
 .home-page-top-page-heading {
-  font-size: 4rem;
-  color: rgb(97, 97, 97);
+  font-size: 6rem;
+  font-weight: bolder;
+  color: rgb(112, 112, 112);
 }
 .home-page-top-page-heading-container {
   display: flex;

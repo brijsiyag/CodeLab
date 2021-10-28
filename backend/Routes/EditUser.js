@@ -27,7 +27,7 @@ router.post("/edituser", async (req, res) => {
           console.log(err);
           return res.send({
             success: false,
-            msg: err.sqlMessage,
+            err: err.sqlMessage,
           });
         } else {
           return res.send({ success: true, result: result });
