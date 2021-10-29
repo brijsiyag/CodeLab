@@ -24,7 +24,7 @@ Axios.defaults.withCredentials = true;
 const Profile = () => {
   const [userData, setUserData] = useState({
     user: {},
-    question_details: [],
+    attempts: [],
     stars: 1,
   });
   const [isProfileEditModal, setisProfileEditModal] = useState(false);
@@ -34,7 +34,7 @@ const Profile = () => {
   const acWacount = (data) => {
     let acCount = 0,
       waCount = 0;
-    data.question_details.forEach((element) => {
+    data.attempts.forEach((element) => {
       if (element.status === "AC") {
         acCount++;
       } else {
@@ -63,7 +63,7 @@ const Profile = () => {
     Axios.get(
       `${process.env.REACT_APP_SERVER_ADDRESS}/userinfo/${username}`
     ).then((res) => {
-      res.data.question_details.reverse();
+      res.data.attempts.reverse();
       res.data.stars = parseInt(res.data.user.rating / 300);
       console.log(res.data);
       setUserData(res.data);
@@ -154,7 +154,7 @@ const Profile = () => {
                 maxWidth: "fit-content",
                 border: "gray 1px solid",
                 overflow: "auto",
-                margin: "auto",
+                margin: "auto 20px",
               }}
             >
               <Table className="profile-recent-activity-container">
@@ -208,7 +208,7 @@ const Profile = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {userData.question_details.map((element) => {
+                  {userData.attempts.map((element) => {
                     return (
                       <TableRow
                         sx={{
@@ -281,8 +281,8 @@ const Profile = () => {
                   })}
                 </TableBody>
               </Table>
-              {userData.question_details !== undefined &&
-                userData.question_details.length === 0 && (
+              {userData.attempts !== undefined &&
+                userData.attempts.length === 0 && (
                   <div className="users-no-submissions">No Submissions</div>
                 )}
             </TableContainer>

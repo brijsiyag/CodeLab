@@ -1,5 +1,5 @@
 .profile-container {
-  width: min(90vw, 900px);
+  width: min(90vw, 1000px);
   min-height: 100vh;
   margin: auto;
   border: 1px rgb(196, 196, 196) solid;
@@ -48,7 +48,7 @@
 }
 
 .profile-main-right {
-  width: 30%;
+  /* width: 35%; */
   padding: 15px;
   display: flex;
   flex-direction: column;

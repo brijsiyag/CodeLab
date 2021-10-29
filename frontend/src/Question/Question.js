@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import "./Question.css";
-import { useHistory } from "react-router";
 import { useParams } from "react-router-dom";
-import { Button } from "@mui/material";
-import CanvasModal from "./CanvasModal";
 import Axios from "axios";
 import QuestionBody from "./QuestionBody";
 import QuestionSidePanel from "./QuestionSidePanel";
@@ -12,7 +9,6 @@ const Question = () => {
   const [questionData, setQuestionData] = useState({});
   const { question_id } = useParams();
   const [relatedQuestions, setrelatedQuestions] = useState([]);
-  const [isCanvas, setIsCanvas] = useState(false);
 
   React.useEffect(() => {
     Axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/question/${question_id}`)
@@ -54,16 +50,6 @@ const Question = () => {
           relatedQuestions={relatedQuestions}
         />
       </div>
-      <Button
-        className="question-canvas-button"
-        variant="contained"
-        onClick={(e) => {
-          setIsCanvas(!isCanvas);
-        }}
-      >
-        Canvas
-      </Button>
-      <CanvasModal isCanvas={isCanvas} setIsCanvas={setIsCanvas} />
     </div>
   );
 };

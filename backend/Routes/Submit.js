@@ -55,7 +55,7 @@ router.post("/submit/:question_id", (req, res) => {
                           });
                         } else {
                           connection.query(
-                            "SELECT * FROM question_details WHERE question_id = ? AND status = 'AC' AND username = ?",
+                            "SELECT * FROM attempts WHERE question_id = ? AND status = 'AC' AND username = ?",
                             [req.params.question_id, req.cookies.username],
                             (err, result) => {
                               if (err) {
@@ -117,7 +117,7 @@ router.post("/submit/:question_id", (req, res) => {
                                 }
                               );
                               connection.query(
-                                "INSERT INTO `question_details`(`question_id`, `username`, `status`, `code`, `time`, `space`, `submission_date`,`lang`) VALUES (?,?,?,?,?,?,?,?)",
+                                "INSERT INTO `attempts`(`question_id`, `username`, `status`, `code`, `time`, `space`, `submission_date`,`lang`) VALUES (?,?,?,?,?,?,?,?)",
                                 [
                                   req.params.question_id,
                                   req.cookies.username,

@@ -238,10 +238,10 @@ INSERT INTO `question` (`question_id`, `name`, `question`, `output`, `tags`, `di
 -- --------------------------------------------------------
 
 --
--- Table structure for table `question_details`
+-- Table structure for table `attempts`
 --
 
-CREATE TABLE `question_details` (
+CREATE TABLE `attempts` (
   `question_id` varchar(100) NOT NULL,
   `username` varchar(100) NOT NULL,
   `status` text NOT NULL,
@@ -254,10 +254,10 @@ CREATE TABLE `question_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `question_details`
+-- Dumping data for table `attempts`
 --
 
-INSERT INTO `question_details` (`question_id`, `username`, `status`, `code`, `time`, `space`, `submission_id`, `submission_date`, `lang`) VALUES
+INSERT INTO `attempts` (`question_id`, `username`, `status`, `code`, `time`, `space`, `submission_id`, `submission_date`, `lang`) VALUES
 ('alice-and-recoloring-1', 'admin', 'AC', 'print(\"3\")', '0.02', '5308', 102, '2021-10-27 20:01:35', 'python3'),
 ('alice-and-recoloring-2', 'admin', 'WA', '', NULL, NULL, 103, '2021-10-27 20:36:32', 'cpp17'),
 ('alice-and-recoloring-2', 'admin', 'WA', '', NULL, NULL, 104, '2021-10-27 20:36:42', 'cpp17');
@@ -507,9 +507,9 @@ ALTER TABLE `question`
   ADD PRIMARY KEY (`question_id`);
 
 --
--- Indexes for table `question_details`
+-- Indexes for table `attempts`
 --
-ALTER TABLE `question_details`
+ALTER TABLE `attempts`
   ADD PRIMARY KEY (`submission_id`),
   ADD KEY `question_id` (`question_id`),
   ADD KEY `username` (`username`);
@@ -531,9 +531,9 @@ ALTER TABLE `activities`
   MODIFY `activity_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
--- AUTO_INCREMENT for table `question_details`
+-- AUTO_INCREMENT for table `attempts`
 --
-ALTER TABLE `question_details`
+ALTER TABLE `attempts`
   MODIFY `submission_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
@@ -541,9 +541,9 @@ ALTER TABLE `question_details`
 --
 
 --
--- Constraints for table `question_details`
+-- Constraints for table `attempts`
 --
-ALTER TABLE `question_details`
+ALTER TABLE `attempts`
   ADD CONSTRAINT `question_details_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `question_details_ibfk_3` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE;
 COMMIT;

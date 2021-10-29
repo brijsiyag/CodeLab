@@ -3,7 +3,7 @@ const router = express.Router();
 const connection = require("../Mysql");
 router.get("/submission/:id", (req, res) => {
   connection.query(
-    "SELECT * FROM  WHERE submission_id = ?",
+    "SELECT * FROM attempts WHERE submission_id = ?",
     [req.params.id],
     (err, result) => {
       if (err || result.length === 0) {
@@ -12,7 +12,7 @@ router.get("/submission/:id", (req, res) => {
         return res.send(result[0]);
       } else {
         connection.query(
-          "SELECT * FROM question_details WHERE question_id = ? AND username = ? AND status = ?",
+          "SELECT * FROM attempts WHERE question_id = ? AND username = ? AND status = ?",
           [result[0].question_id, req.cookies.username, "AC"],
           (err, result1) => {
             if (err || result1.length === 0) {

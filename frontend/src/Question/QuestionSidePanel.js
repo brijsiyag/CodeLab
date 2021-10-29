@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
+import CanvasModal from "./CanvasModal";
 const QuestionSidePanel = ({ questionData, relatedQuestions }) => {
+  const [isCanvas, setIsCanvas] = useState(false);
   return (
     <div className="question-right-panel">
+      <Button
+        className="question-canvas-button"
+        variant="contained"
+        onClick={(e) => {
+          setIsCanvas(!isCanvas);
+        }}
+      >
+        Canvas
+      </Button>
+      <CanvasModal isCanvas={isCanvas} setIsCanvas={setIsCanvas} />
       <div className="question-tags-main-container">
         <div className="question-tags-heading">Tags</div>
         <div className="question-tags-container">

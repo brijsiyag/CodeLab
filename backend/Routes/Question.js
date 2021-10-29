@@ -13,7 +13,7 @@ router.get("/question/:id", (req, res) => {
       } else {
         result[0].date = result[0].date.toDateString();
         connection.query(
-          "SELECT `username`, `status`, `time`, `space`, `submission_id`, `lang` FROM `question_details` WHERE question_id = ?",
+          "SELECT `username`, `status`, `time`, `space`, `submission_id`, `lang` FROM `attempts` WHERE question_id = ?",
           [req.params.id],
           (err, result1) => {
             if (err) {

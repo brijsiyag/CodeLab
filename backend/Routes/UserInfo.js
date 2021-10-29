@@ -15,7 +15,7 @@ router.get("/userinfo/:username", (req, res) => {
         return res.sendStatus(400);
       } else {
         connection.query(
-          "SELECT  `question_id`, `username`, `status`, `time`, `space`, `submission_id`, `submission_date`, `lang` FROM question_details WHERE username = ?",
+          "SELECT  `question_id`, `username`, `status`, `time`, `space`, `submission_id`, `submission_date`, `lang` FROM attempts WHERE username = ?",
           [username],
           (err, result_question_details) => {
             if (err) {
@@ -37,7 +37,7 @@ router.get("/userinfo/:username", (req, res) => {
                 result_user[0].global_rank = rank_result[0].rank;
                 return res.send({
                   user: result_user[0],
-                  question_details: result_question_details,
+                  attempts: result_question_details,
                 });
               }
             );
