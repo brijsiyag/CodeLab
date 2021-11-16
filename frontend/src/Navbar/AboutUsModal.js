@@ -11,6 +11,8 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: "60vw",
   height: "fit-content",
+  maxHeight: "90vh",
+  overflow: "auto",
   bgcolor: "background.paper",
   border: "1px solid gray",
   boxShadow: "white 0 0 5px 0.5px",

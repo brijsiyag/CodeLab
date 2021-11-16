@@ -26,7 +26,7 @@ const AboutUs = () => {
   };
   return (
     <div>
-      <h1 style={style.mainHeading}>About</h1>
+      <h1 style={style.mainHeading}>About Us</h1>
       <div style={style.mainContent}>
         <div style={style.separateDiv}>
           CodeLab is an initiative of the students of Pandit Dwarka Prasad
