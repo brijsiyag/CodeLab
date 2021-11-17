@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -23,6 +21,7 @@ import Profile from "./Profile/Profile";
 import PageNotFound_404 from "./PageNotFound_404";
 import Submission from "./Submission/Submission";
 import AdminPage from "./AdminControls/AdminPage";
+import ScreenSizeModal from "./ScreenSizeModal";
 import { Notification } from "./Notification";
 Axios.defaults.withCredentials = true;
 
@@ -122,6 +121,7 @@ function App() {
       </Router>
       <CookieConsent />
       <Notification />
+      <ScreenSizeModal />
     </div>
   );
 }

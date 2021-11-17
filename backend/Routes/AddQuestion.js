@@ -31,10 +31,9 @@ router.post("/addquestion", (req, res) => {
           tag += element + ", ";
         });
         UpdateActivities(
-          `New Problem ${req.body.name} added with tags ${tag.slice(
-            0,
-            tag.length - 2
-          )}.`
+          `New Problem ${req.body.name}(${
+            req.body.question_id
+          }) added with tags ${tag.slice(0, tag.length - 2)}.`
         );
         return res.send({ ...result, success: true });
       }

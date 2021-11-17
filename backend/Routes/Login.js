@@ -9,6 +9,12 @@ router.post("/login", (req, res) => {
     "SELECT * FROM user WHERE username = ? AND password = ?",
     [userName, password],
     (err, result) => {
+      if (err) {
+        return res.send({
+          success: false,
+          err: "Something Went Wrong!! Please Try Again.",
+        });
+      }
       if (result.length > 0) {
         res
           .cookie("Auth", true, {
@@ -23,7 +29,11 @@ router.post("/login", (req, res) => {
           })
           .send({ success: true, admin: result[0].admin === 1 ? true : false });
       } else {
-        return res.send({ success: false, admin: false });
+        return res.send({
+          success: false,
+          admin: false,
+          err: "Invalid Credentials!!",
+        });
       }
     }
   );
