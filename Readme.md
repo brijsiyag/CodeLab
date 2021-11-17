@@ -1,5 +1,10 @@
 # CodeLab
 
+## https://codelab-cp.herokuapp.com
+### For admin controls 
+- username : admin
+- password : admin
+
 ## This Project is currently Under Active Development
 
 In the project directory, Run `cd frontend/` and `cd backend/`
