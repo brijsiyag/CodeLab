@@ -29,7 +29,7 @@ const AboutUs = () => {
       <h1 style={style.mainHeading}>About Us</h1>
       <div style={style.mainContent}>
         <div style={style.separateDiv}>
-          CodeLab is an initiative of the students of Pandit Dwarka Prasad
+          CodeLab is an initiative Brijmohan Siyag a student of Pandit Dwarka Prasad
           Mishra Indian Institute of Information Technology Design and
           Manufacturing, Jabalpur.
         </div>
@@ -49,21 +49,6 @@ const AboutUs = () => {
           You can build your logic for the questions on the canvas and code it
           on our very own IDE. You can download your code super easily with a
           single click.
-        </div>
-      </div>
-      <h2 style={style.secondaryHeading}>How We Were Able To Do It</h2>
-      <div style={style.secondaryContent}>
-        <div style={style.separateDiv}>
-          This project was built for the final Lab Project of our course
-          Database Management System. All the knowledge we gathered from the
-          lecture of Prof. Pritee Khanna we put into this project. Apart from
-          the support and guidance of our head TA Amit Bhati and our project
-          guide Shubhangi Chaturvedi this was easier to pull off.
-        </div>
-        <div style={style.separateDiv}>
-          As a team we learned and grew a lot from this project. Our team
-          includes Brijmohan Siyag, Devendra Kumar and Sanu Gautam. Our
-          collaborative effort led us to this beautiful project.
         </div>
       </div>
       <p style={{ textAlign: "center" }}>©CodeLab</p>
